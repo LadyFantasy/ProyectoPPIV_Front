@@ -21,11 +21,13 @@ function Login() {
         body: JSON.stringify({ username, password }), // Enviar los datos de login
       });
 
-      const data = await response.json(); // Obtener la respuesta en formato JSON
+      const data = await response.json(); // Obtener la respuesta en formato 
+      console.log("data", data)
 
-      if (response.status === 200 && data.success) {
+      if (response.status === 200 ) {
+        console.log("data.token", data.access_token)
         // Si el login es exitoso, se guarda el token en el localStorage
-        localStorage.setItem("token", data.token);
+        localStorage.setItem("token", data.access_token);
 
         // Redirigir a la página de unidades
         navigate("/units");
