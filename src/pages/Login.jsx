@@ -4,38 +4,36 @@ import { useNavigate } from "react-router-dom";
 import "../styles/Login.css";
 
 function Login() {
-  const [username, setUsername] = useState(""); // Sin valores predeterminados, el usuario ingresa su propio usuario
-  const [password, setPassword] = useState(""); // Sin valores predeterminados, el usuario ingresa su propia contraseña
-  const [error, setError] = useState(""); // Para mostrar errores si los hay
-  const navigate = useNavigate(); // Para redirigir después del login
+  const [username, setUsername] = useState(""); 
+  const [password, setPassword] = useState(""); 
+  const [error, setError] = useState(""); // 
+  const navigate = useNavigate(); 
 
   const handleLogin = async (e) => {
-    e.preventDefault(); // Evita la recarga de la página al hacer submit
-
+    e.preventDefault(); 
+    
     try {
       const response = await fetch("https://proyectoppvi.onrender.com/login", {
-        method: "POST", // Enviar datos al backend
+        method: "POST", 
         headers: {
-          "Content-Type": "application/json", // Indicar que se envía JSON
+          "Content-Type": "application/json", 
         },
-        body: JSON.stringify({ username, password }), // Enviar los datos de login
+        body: JSON.stringify({ username, password }), 
       });
 
-      const data = await response.json(); // Obtener la respuesta en formato 
-      console.log("data", data)
+      const data = await response.json(); 
 
       if (response.status === 200 ) {
-        console.log("data.token", data.access_token)
-        // Si el login es exitoso, se guarda el token en el localStorage
+       
         localStorage.setItem("token", data.access_token);
 
-        // Redirigir a la página de unidades
-        navigate("/units");
+       
+        navigate("/admin");
       } else if (response.status === 401) {
-        // Si las credenciales son incorrectas
+        
         setError("Usuario o contraseña incorrectos");
       } else {
-        // Manejo de otros errores del servidor
+       
         setError("Error inesperado del servidor");
       }
     } catch (err) {
@@ -49,24 +47,25 @@ function Login() {
       <h2>Iniciar sesión</h2>
       <form onSubmit={handleLogin} className="login-form">
         <input
-          type="text"
-          placeholder="Usuario"
+        
+          type="texto" /* CAMBIAR A TYPE TEXT CUANDO SE ACTUALICE LA DB */
+          placeholder="Tu email..."
           value={username}
-          onChange={(e) => setUsername(e.target.value)} // Actualiza el valor del usuario
+          onChange={(e) => setUsername(e.target.value)}
           required
           className="login-input"
         />
         <input
           type="password"
-          placeholder="Contraseña"
+          placeholder="Tu contraseña..."
           value={password}
-          onChange={(e) => setPassword(e.target.value)} // Actualiza el valor de la contraseña
+          onChange={(e) => setPassword(e.target.value)} 
           required
           className="login-input"
         />
         <button type="submit" className="login-button button">Ingresar</button>
       </form>
-      {error && <p className="error">{error}</p>} {/* Mostrar error si es necesario */}
+      {error && <p className="error">{error}</p>} {}
     </div>
   );
 }

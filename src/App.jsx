@@ -1,19 +1,27 @@
 // App.jsx
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import {BrowserRouter as Router, Routes, Route} from "react-router-dom";
 import Login from "./pages/Login";
 import Units from "./pages/Units"
+import PanelAdmin from "./pages/AdminPanel";
 import "./styles/main.css";
-import "./styles/layout.css";
 
 function App() {
-  return (
-    <Router>
-      <Routes>
-        <Route path="/" element={<Login />} />
-        <Route path="/units" element={<Units />} />
-      </Routes>
-    </Router>
-  );
+    return (
+        <AuthProvider>
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<Login />} />
+          <Route path="/admin" element={
+              <PrivateRoute>
+                <PanelAdmin />
+              </PrivateRoute>
+            }
+          />
+          {/* otras rutas públicas… */}
+        </Routes>
+      </BrowserRouter>
+    </AuthProvider>
+    );
 }
 
 export default App;
