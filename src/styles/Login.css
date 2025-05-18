@@ -164,4 +164,5 @@
 .login-login_pass{
   color: var(--color-primary);
   font-size: 1.5rem;
+  cursor: pointer;
 }
