@@ -27,7 +27,6 @@ function Login() {
        
         localStorage.setItem("token", data.access_token);
 
-       
         navigate("/admin");
       } else if (response.status === 401) {
         
@@ -44,7 +43,9 @@ function Login() {
 
   return (
     <div className="login-container">
-      <h2>Iniciar sesión</h2>
+      <span className="omega-logo">Ω</span>
+      <div className="login-login">
+        <h2>Bienvenido</h2>
       <form onSubmit={handleLogin} className="login-form">
         <input
         
@@ -65,7 +66,11 @@ function Login() {
         />
         <button type="submit" className="login-button button">Ingresar</button>
       </form>
+      {/* TODO Agregar un botón de "Olvidé mi contraseña"
+          TODO Agregar un botón de "Crear cuenta" */}
       {error && <p className="error">{error}</p>} {}
+      </div>
+      
     </div>
   );
 }
