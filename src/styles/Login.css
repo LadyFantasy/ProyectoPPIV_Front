@@ -54,7 +54,7 @@
   padding: 2rem;
   border-radius: 1rem;
   font-size: 1.5rem;
-  width: 100%; /* opcional si el padre ya tiene ancho definido */
+  width: 100%; 
   max-width: 40rem;
   
 }
@@ -64,7 +64,7 @@
   box-sizing: border-box; 
   padding: 1.2rem 3.5rem;
   background-color: inherit;
-  border: 2px solid var(--color-secondary); 
+  border: 3px solid var(--color-secondary); 
   font-family: var(--font-base); 
   font-size: 1.6rem;
   color: var(--color-primary);
@@ -72,8 +72,8 @@
 }
 
 .login-input::placeholder {
-  color: var(--color-secondary); /* o cualquier otro color */
-  opacity: .7; /* por si querés que no sea tan tenue */
+  color: var(--color-secondary); 
+  opacity: .9; 
 }
   
 
