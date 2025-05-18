@@ -1,0 +1,66 @@
+
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap');
+
+
+/***** RESET BÁSICO *****/
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-size: 62.5%;
+  scroll-behavior: smooth;
+  text-rendering: optimizeSpeed;
+  color-scheme: light dark;
+}
+
+body {
+  min-height: 100vh;
+  font-family: var(--font-base, sans-serif);
+}
+
+img, picture, video, canvas, svg {
+  display: block;
+  max-width: 100%;
+}
+
+input, button, textarea, select {
+  font: inherit;
+  
+}
+
+ul, ol {
+  list-style: none;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+p, h1, h2, h3, h4, h5, h6 {
+  overflow-wrap: break-word;
+}
+
+/***** VARIABLES CSS *****/
+:root {
+  
+  /* Colores base */
+  --color-primary: #39818E;       
+  --color-secondary: #c0cddd;    
+  /* --color-accent: #f4a261;       
+  --color-dark: #1d3557;         
+  --color-light: #f1faee;        
+ */
+
+  /* Tipografía */
+  --font-base: 'Nunito', system-ui, sans-serif;
+ /*  --font-alt: 'Georgia', serif;
+  --font-mono: 'Courier New', monospace; */
+  }
+
+
+
+ 
