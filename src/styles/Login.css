@@ -59,6 +59,8 @@
   
 }
 
+
+
 .login-input{
   all: unset;
   box-sizing: border-box; 
@@ -71,25 +73,66 @@
   width: 100%;
 }
 
+.login-input-wrapper {
+  position: relative;
+  width: 100%;
+ 
+}
+
+
 .login-input::placeholder {
   color: var(--color-secondary); 
   opacity: .9; 
 }
+
+.login-input-top {
+  border-top-left-radius: 0.6rem;
+  border-top-right-radius: 0.6rem;
+
+}
+
+.login-input-bottom {
+  border-top: none; 
+  border-bottom-left-radius: 0.6rem;
+  border-bottom-right-radius: 0.6rem;
   
-
-.login-input:first-of-type{
-  border-top-left-radius: .6rem;
-  border-top-right-radius: .6rem;
-  border-color: var(--color-secondary);
 }
 
-.login-input:last-of-type{
- border-bottom-left-radius: .6rem;
+
+.toggle-password {
+  position: absolute;
+   width: 3rem;
+  height: 3rem;
+  right: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 1.6rem;
+  color: var(--color-secondary);
+  /* padding: .6rem; */
+}
+
+
+.login-input-wrapper .login-input {
+  border-bottom-left-radius: .6rem;
   border-bottom-right-radius: .6rem;
-  border-top: none;
-  border-color: var(--color-secondary);
+  padding-right: 5rem; /* o 5rem para mayor espacio */
+  
 }
 
+.login-error {
+  color: red;
+  font-size: 1.5rem;
+  margin-top: 2rem;
+  text-align: center;
+  background-color: #fdebeb;
+  border: 1px solid red;
+  padding: 0.8rem 1.2rem;
+  border-radius: 0.5rem;
+  width: 100%;
+}
 .login-button{
   all: unset;
   box-sizing: border-box;
@@ -103,7 +146,21 @@
   margin-top: 2rem;
   cursor: pointer;
   width: 100%;
+  transition: all 0.3s ease;
 }
+
+.login-button:hover {
+  background-color: var(--color-primary);
+  color: white;
+  
+}
+
+.login-button:active {
+  background-color: var(--color-primary); 
+  transform: scale(0.98); 
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.24); 
+}
+
 .login-login_pass{
   color: var(--color-primary);
   font-size: 1.5rem;
