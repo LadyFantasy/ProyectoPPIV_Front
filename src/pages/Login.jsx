@@ -21,16 +21,19 @@ function Login() {
         e.preventDefault();
 
         try {
+            console.log("Enviando al backend:", JSON.stringify({ username, password }));
             const response = await fetch("https://proyectoppvi.onrender.com/login", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
                 },
                 body: JSON.stringify({username, password})
+                
             });
 
             const data = await response.json();
-
+            
+            
             if (response.status === 200) {
                 login(data.access_token);
                 navigate("/admin");
@@ -45,6 +48,7 @@ function Login() {
         }
     };
 
+                           
     return (
         <div className="login-container">
             <div className="login-logo">
@@ -62,7 +66,7 @@ function Login() {
                         onChange={(e) => setUsername(e.target.value)}
                         onFocus={() => setError("")}
                         required
-                        className="login-input login-input-top"/> {/* TODO Cambiar a type="password" cuando se actualice la DB */}
+                        className="login-input login-input-top"/> 
                     <div className="login-input-wrapper">
                         <input
                             type={showPassword
@@ -74,6 +78,7 @@ function Login() {
                             onFocus={() => setError("")}
                             required
                             className="login-input login-input-bottom"/>
+                            
                         <button
                             type="button"
                             className="toggle-password"

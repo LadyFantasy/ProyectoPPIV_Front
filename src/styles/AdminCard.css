@@ -1,0 +1,10 @@
+.admin-panel__card{
+  background-color: var(--color-secondary);
+  border-radius: 1rem;
+  box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.1);
+  padding: 2rem;
+  color: white;
+  text-align: center;
+  padding: 5rem 2rem;
+  cursor: pointer;
+}

@@ -1,0 +1,34 @@
+.navbar__wrapper {
+  height: 3rem;
+  background-color: white;
+  color: var(--color-primary);
+
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 2rem;
+  border-bottom: 2px solid var(--color-primary);
+  padding: 3rem;
+}
+
+.navbar-title__logo {
+  font-size: 3rem;
+  font-weight: 600;
+  color: var(--color-primary);
+  margin-right: 2rem;
+}
+
+.navbar-title__wrapper {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+}
+
+.navbar__home {
+  font-size: 3.5rem;
+  color: var(--color-primary);
+  margin-right: 2rem;
+  cursor: pointer;
+}
