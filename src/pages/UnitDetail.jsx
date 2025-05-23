@@ -1,154 +1,191 @@
-import React, { useState } from "react";
-import { fetchWithToken } from "../utils/fetchWithToken"; 
-import "../styles/UnitDetail.css"; 
+// src/pages/UnitDetail.jsx
+import { useLocation, useNavigate } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { fetchWithToken } from "../utils/fetchWithToken";
+import PhotoCarousel from "../components/PhotoCarousel";
+import ConfirmModal from "../components/ConfirmModal";
+import SuccessModal from "../components/SuccessModal";
+import "../styles/UnitDetail.css";
 
-export default function UnitDetail({ unit, onUpdate, onDelete }) {
-  const [formData, setFormData] = useState({
-    rooms: unit.rooms,
-    beds: unit.beds,
-    description: unit.description,
-    price: unit.price,
-    amenities: unit.amenities,
-    urls_fotos: unit.urls_fotos,
-    id: unit.id,
-  });
+const ALL_AMENITIES = [
+  "aire acondicionado",
+  "ventilador",
+  "wifi",
+  "hidromasaje/jacuzzi",
+  "parking",
+  "parrilla",
+  "piscina",
+  "admite mascotas",
+  "balcón",
+  "lavarropa",
+  "cocina",
+  "gimnasio",
+  "incluye desayuno",
+  "detector de humo",
+  "blanqueria",
+  "servicio de habitaciones",
+];
 
-  const [showConfirmModal, setShowConfirmModal] = useState(false);
-  const [showSuccessModal, setShowSuccessModal] = useState(false);
-  const [actionType, setActionType] = useState(null); // "edit" o "delete"
+export default function UnitDetail() {
+  const { state } = useLocation();
+  const unit = state?.unit;
+  const navigate = useNavigate();
+
+  const [formData, setFormData] = useState(
+    unit
+      ? {
+          ...unit,
+          address: unit.address || "",
+          bathrooms: unit.bathrooms || 1,
+          urls_fotos: unit.urls_fotos || "",
+        }
+      : null
+  );
+  const [amenities, setAmenities] = useState(
+    unit?.amenities ? unit.amenities.split(",").map((a) => a.trim()) : []
+  );
+  const [modal, setModal] = useState(null); // "edit" | "delete" | null
   const [error, setError] = useState("");
+  const [success, setSuccess] = useState(false);
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((fd) => ({ ...fd, [name]: value }));
+  useEffect(() => {
+    if (!unit) navigate("/units");
+  }, [unit, navigate]);
+
+  if (!unit || !formData) return null;
+
+  const handleChange = (e) =>
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value,
+    });
+
+  const handleAmenitiesChange = (e) => {
+    const selected = Array.from(e.target.selectedOptions).map((opt) => opt.value);
+    setAmenities(selected);
   };
 
-  const openConfirm = (type) => {
-    setActionType(type);
-    setShowConfirmModal(true);
-  };
+  // Preparo el objeto que envía al backend, con tipos correctos
+ const dataToSend = {
+  id: formData.id,
+  rooms: Number(formData.rooms),
+  beds: Number(formData.beds),
+  bathrooms: Number(formData.bathrooms),
+  description: formData.description,
+  price: Number(formData.price),
+  amenities: amenities.join(", "),          //  <-- string
+  urls_fotos:
+    formData.urls_fotos && formData.urls_fotos.length > 0
+      ? formData.urls_fotos                    // deja la cadena tal cual
+      : "",                                    // o cadena vacía
+};
 
-  const closeConfirm = () => {
-    setShowConfirmModal(false);
-    setError("");
-  };
+  console.log("Enviando al backend (editarUnidad):", dataToSend);
+  console.log("JSON enviado:", JSON.stringify(dataToSend));
 
-  const closeSuccess = () => {
-    setShowSuccessModal(false);
-  };
-
-  const handleConfirm = async () => {
-    try {
-      setShowConfirmModal(false);
-      if (actionType === "edit") {
-        const res = await fetchWithToken("/editarUnidad", {
-          method: "POST",
-          body: JSON.stringify(formData),
-        });
-        console.log(res)
-        setShowSuccessModal(true);
-        onUpdate && onUpdate(formData);
-      } else if (actionType === "delete") {
-        const res = await fetchWithToken("/eliminarUnidad", {
-          method: "POST",
-          body: JSON.stringify({ id: formData.id }),
-        });
-        console.log(res)
-        setShowSuccessModal(true);
-        onDelete && onDelete(formData.id);
-      }
-    } catch (err) {
-      setError(err.message);
-      setShowConfirmModal(true);
+const confirmAction = async () => {
+  try {
+    if (modal === "edit") {
+      console.log("JSON enviado:", JSON.stringify(dataToSend));
+      await fetchWithToken("/editarUnidad", {
+        method: "POST",
+        body: JSON.stringify(dataToSend),
+      });
+    } else if (modal === "delete") {
+      await fetchWithToken("/eliminarUnidad", {
+        method: "POST",
+        body: JSON.stringify({ id: formData.id }),
+      });
     }
-  };
+
+    setModal(null);
+    setSuccess(true);
+    setTimeout(() => {
+      modal === "delete" ? navigate("/units") : setSuccess(false);
+    }, 1500);
+  } catch (err) {
+    setError(err.message || "Error al procesar la solicitud");
+  }
+};
+
 
   return (
-    <>
-      <div className="unit-detail">
-        <label>
-          Habitaciones:
-          <input
-            type="number"
-            name="rooms"
-            value={formData.rooms}
-            onChange={handleChange}
-          />
-        </label>
-        <label>
-          Camas:
-          <input
-            type="number"
-            name="beds"
-            value={formData.beds}
-            onChange={handleChange}
-          />
-        </label>
-        <label>
-          Descripción:
-          <textarea
-            name="description"
-            value={formData.description}
-            onChange={handleChange}
-          />
-        </label>
-        <label>
-          Precio:
-          <input
-            type="number"
-            name="price"
-            value={formData.price}
-            onChange={handleChange}
-          />
-        </label>
-        <label>
-          Amenities (coma separados):
-          <input
-            type="text"
-            name="amenities"
-            value={formData.amenities}
-            onChange={handleChange}
-          />
-        </label>
-        <label>
-          URLs Fotos (coma separados):
-          <input
-            type="text"
-            name="urls_fotos"
-            value={formData.urls_fotos}
-            onChange={handleChange}
-          />
-        </label>
+    <div className="unit-detail">
+      <button onClick={() => navigate("/units")}>Volver</button>
+      <h2>Modificar unidad</h2>
 
-        <div className="buttons">
-          <button onClick={() => openConfirm("edit")}>Guardar Cambios</button>
-          <button onClick={() => openConfirm("delete")}>Eliminar Unidad</button>
-        </div>
+      <PhotoCarousel fotos={unit.urls_fotos?.split(",")} />
+
+      <label>
+        Descripción
+        <input name="description" value={formData.description} onChange={handleChange} />
+      </label>
+
+      <label>
+        Dirección
+        <input name="address" value={formData.address} onChange={handleChange} />
+      </label>
+
+      <label>
+        Precio
+        <input
+          name="price"
+          type="number"
+          value={formData.price}
+          onChange={handleChange}
+        />
+      </label>
+
+      {["rooms", "beds", "bathrooms"].map((field) => (
+        <label key={field}>
+          {field === "rooms"
+            ? "Habitaciones"
+            : field === "beds"
+            ? "Camas"
+            : "Baños"}
+          <select name={field} value={formData[field]} onChange={handleChange}>
+            {Array.from({ length: 10 }, (_, i) => i + 1).map((n) => (
+              <option key={n} value={n}>
+                {n}
+              </option>
+            ))}
+          </select>
+        </label>
+      ))}
+
+      <label>
+        Comodidades (mantén Ctrl/Cmd para seleccionar varias)
+        <select
+          multiple
+          value={amenities}
+          onChange={handleAmenitiesChange}
+          style={{ minHeight: "8rem" }}
+        >
+          {ALL_AMENITIES.map((a) => (
+            <option key={a} value={a}>
+              {a}
+            </option>
+          ))}
+        </select>
+      </label>
+
+      <div className="unit-detail__buttons">
+        <button onClick={() => setModal("edit")}>Modificar</button>
+        <button className="danger" onClick={() => setModal("delete")}>
+          Eliminar
+        </button>
       </div>
 
-      {showConfirmModal && (
-        <>
-          <div className="overlay" />
-          <div className="modal">
-            <p>
-              ¿Desea confirmar {actionType === "edit" ? "los cambios" : "la eliminación"}?
-            </p>
-            {error && <p className="error">{error}</p>}
-            <button onClick={handleConfirm}>Confirmar</button>
-            <button onClick={closeConfirm}>Cancelar</button>
-          </div>
-        </>
+      {modal && (
+        <ConfirmModal
+          text={modal === "edit" ? "¿Confirmar cambios?" : "¿Eliminar unidad?"}
+          error={error}
+          onConfirm={confirmAction}
+          onCancel={() => setModal(null)}
+        />
       )}
 
-      {showSuccessModal && (
-        <>
-          <div className="overlay" />
-          <div className="modal">
-            <p>Cambios guardados correctamente</p>
-            <button onClick={closeSuccess}>Cerrar</button>
-          </div>
-        </>
-      )}
-    </>
+      {success && <SuccessModal message="Acción realizada correctamente." />}
+    </div>
   );
 }
