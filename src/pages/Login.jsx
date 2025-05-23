@@ -4,6 +4,7 @@ import {useNavigate} from "react-router-dom";
 import {useAuth} from "../context/AuthContext";
 import "../styles/Login.css";
 import {FiEye, FiEyeOff} from "react-icons/fi";
+import Button1 from "../components/Button1";
 
 function Login() {
     const [username,
@@ -92,7 +93,7 @@ function Login() {
                         </button>
                     </div>
                     {error && <p className="login-error">{error}</p>}
-                    {} < button type = "submit" className = "login-button" > Ingresar </button>
+                    {} <Button1 type="submit" title="Ingresar" />
         </form > <h4 className="login-login_pass">Olvidé mi contraseña</h4>
                 {/* TODO Agregar en botón de "Olvidé mi contraseña" link a algún lado
             TODO Agregar un botón de "Crear cuenta" */}
