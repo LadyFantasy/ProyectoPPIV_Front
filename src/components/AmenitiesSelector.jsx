@@ -1,23 +1,41 @@
-const ALL_AMENITIES = [
-  "aire acondicionado", "ventilador", "wifi", "hidromasaje/jacuzzi",
-  "parking", "parrilla", "piscina", "admite mascotas", "balcón",
-  "lavarropa", "cocina", "gimnasio", "incluye desayuno", "detector de humo",
-  "blanqueria", "servicio de habitaciones"
-];
+import { useState } from "react";
+import "../styles/AmenitiesSelector.css";
 
-export default function AmenitySelector({ selected = [], onToggle }) {
-  const handleChange = (e) => {
-    const options = Array.from(e.target.selectedOptions).map(opt => opt.value);
-    onToggle(options);
+export default function AmenitiesSelector({ all, selected, onChange }) {
+  const [open, setOpen] = useState(false);
+
+  const toggleAmenity = (amenity) => {
+    onChange(
+      selected.includes(amenity)
+        ? selected.filter((a) => a !== amenity)
+        : [...selected, amenity]
+    );
   };
 
   return (
-    <select multiple value={selected} onChange={handleChange}>
-      {ALL_AMENITIES.map((amenity) => (
-        <option key={amenity} value={amenity}>
-          {amenity}
-        </option>
-      ))}
-    </select>
+    <div className="amenities-dropdown">
+      <button
+        type="button"
+        className="amenities-toggle"
+        onClick={() => setOpen((o) => !o)}
+      >
+        Comodidades
+      </button>
+
+      {open && (
+        <div className="amenities-options">
+          {all.map((a) => (
+            <label key={a} className="amenity-option">
+              <input
+                type="checkbox"
+                checked={selected.includes(a)}
+                onChange={() => toggleAmenity(a)}
+              />
+              {a}
+            </label>
+          ))}
+        </div>
+      )}
+    </div>
   );
 }

@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useFetchWithAuth } from "../hooks/useFetchWithAuth";
 import UnitCard from "../components/UnitCard";
+import Navbar from "../components/Navbar";
 import "../styles/Units.css";
 
 const UNITS_URL = "https://proyectoppvi.onrender.com/api/terceros/units";
@@ -17,7 +18,9 @@ export default function Units() {
   if (error) return <p>Error: {error}</p>;
 
   return (
-    <div className="units-page">
+    <>
+    <Navbar />
+ <div className="units-page">
       <h2>Unidades</h2>
 
       {units.length === 0 ? (
@@ -31,4 +34,8 @@ export default function Units() {
       )}
     </div>
   );
+    </>
+  );
+
+    
 }

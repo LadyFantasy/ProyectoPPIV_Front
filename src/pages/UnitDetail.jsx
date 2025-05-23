@@ -5,7 +5,10 @@ import { fetchWithToken } from "../utils/fetchWithToken";
 import PhotoCarousel from "../components/PhotoCarousel";
 import ConfirmModal from "../components/ConfirmModal";
 import SuccessModal from "../components/SuccessModal";
+import AmenitiesSelector from "../components/AmenitiesSelector";
+import placeholder from "../assets/casita.jpg";
 import "../styles/UnitDetail.css";
+
 
 const ALL_AMENITIES = [
   "aire acondicionado",
@@ -60,10 +63,7 @@ export default function UnitDetail() {
       [e.target.name]: e.target.value,
     });
 
-  const handleAmenitiesChange = (e) => {
-    const selected = Array.from(e.target.selectedOptions).map((opt) => opt.value);
-    setAmenities(selected);
-  };
+
 
   // Preparo el objeto que envía al backend, con tipos correctos
  const dataToSend = {
@@ -108,13 +108,17 @@ const confirmAction = async () => {
   }
 };
 
+const fotos =
+  unit.urls_fotos && unit.urls_fotos.trim() !== ""
+    ? unit.urls_fotos.split(",").map(f => f.trim()).filter(f => f !== "")
+    : [placeholder];
 
   return (
     <div className="unit-detail">
       <button onClick={() => navigate("/units")}>Volver</button>
       <h2>Modificar unidad</h2>
 
-      <PhotoCarousel fotos={unit.urls_fotos?.split(",")} />
+      <PhotoCarousel fotos={fotos} />
 
       <label>
         Descripción
@@ -153,21 +157,12 @@ const confirmAction = async () => {
         </label>
       ))}
 
-      <label>
-        Comodidades (mantén Ctrl/Cmd para seleccionar varias)
-        <select
-          multiple
-          value={amenities}
-          onChange={handleAmenitiesChange}
-          style={{ minHeight: "8rem" }}
-        >
-          {ALL_AMENITIES.map((a) => (
-            <option key={a} value={a}>
-              {a}
-            </option>
-          ))}
-        </select>
-      </label>
+<AmenitiesSelector
+  all={ALL_AMENITIES}
+  selected={amenities}
+  onChange={setAmenities}
+/>
+
 
       <div className="unit-detail__buttons">
         <button onClick={() => setModal("edit")}>Modificar</button>

@@ -6,7 +6,6 @@ export function useFetchWithAuth(url, options = {}) {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(true);
 
-  // Serializamos las opciones para evitar problemas de referencia en useEffect
   const optionsKey = JSON.stringify(options);
 
   useEffect(() => {
@@ -41,7 +40,7 @@ export function useFetchWithAuth(url, options = {}) {
     };
 
     fetchData();
-  }, [url, optionsKey]); // 👈 se vuelve estable al usar options serializado
+  }, [url, optionsKey]); 
 
   return { data, error, loading };
 }
