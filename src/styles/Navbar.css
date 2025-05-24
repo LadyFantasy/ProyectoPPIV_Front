@@ -1,6 +1,11 @@
 .navbar__wrapper {
-  height: 3rem;
-  background-color: white;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  height: 4rem;
+  background-color: var(--color-primary);
   color: var(--color-primary);
 
   display: flex;
@@ -8,14 +13,17 @@
   justify-content: space-between;
   align-items: center;
   font-size: 2rem;
-  border-bottom: 2px solid var(--color-primary);
+
   padding: 3rem;
 }
-
+.navbar-title__title{
+  color: #fff;
+  font-weight: 600;
+}
 .navbar-title__logo {
   font-size: 3rem;
   font-weight: 600;
-  color: var(--color-primary);
+  color: #fff;
   margin-right: 2rem;
 }
 
@@ -26,9 +34,19 @@
   align-items: center;
 }
 
-.navbar__home {
+.navbar-icons__wrapper {
+  display: flex;
+  gap: 3rem;
+  align-items: center;
+}
+
+.navbar__home, .navbar__logout {
   font-size: 3.5rem;
-  color: var(--color-primary);
-  margin-right: 2rem;
+  color: #fff;
   cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+.navbar__home:hover, .navbar__logout:hover {
+  transform: scale(1.05);
 }
