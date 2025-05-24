@@ -1,5 +1,6 @@
 import { useState } from "react";
 import "../styles/AmenitiesSelector.css";
+import Button1 from "./Button1";
 
 export default function AmenitiesSelector({ all, selected, onChange }) {
   const [open, setOpen] = useState(false);
@@ -14,19 +15,20 @@ export default function AmenitiesSelector({ all, selected, onChange }) {
 
   return (
     <div className="amenities-dropdown">
-      <button
+      <Button1
         type="button"
-        className="amenities-toggle"
-        onClick={() => setOpen((o) => !o)}
-      >
-        Comodidades
-      </button>
+        className="button1 amenities-toggle"
+        onClick={() => setOpen((o) => !o)} title="Comodidades"
+      />
+    
+   
 
       {open && (
         <div className="amenities-options">
           {all.map((a) => (
             <label key={a} className="amenity-option">
               <input
+                className="amenity-checkbox"
                 type="checkbox"
                 checked={selected.includes(a)}
                 onChange={() => toggleAmenity(a)}

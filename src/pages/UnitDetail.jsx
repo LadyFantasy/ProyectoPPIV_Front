@@ -7,9 +7,10 @@ import PhotoCarousel from "../components/PhotoCarousel";
 import ConfirmModal from "../components/ConfirmModal";
 import SuccessModal from "../components/SuccessModal";
 import AmenitiesSelector from "../components/AmenitiesSelector";
+import Button1 from "../components/Button1";
+import { FaArrowLeft } from "react-icons/fa";
 import placeholder from "../assets/casita.jpg";
 import "../styles/UnitDetail.css";
-
 
 const ALL_AMENITIES = [
   "aire acondicionado",
@@ -27,7 +28,7 @@ const ALL_AMENITIES = [
   "incluye desayuno",
   "detector de humo",
   "blanqueria",
-  "servicio de habitaciones",
+  "servicio de habitaciones"
 ];
 
 export default function UnitDetail() {
@@ -39,16 +40,17 @@ export default function UnitDetail() {
     unit
       ? {
           ...unit,
+          title: unit.title || "",
           address: unit.address || "",
           bathrooms: unit.bathrooms || 1,
-          urls_fotos: unit.urls_fotos || "",
+          urls_fotos: unit.urls_fotos || ""
         }
       : null
   );
   const [amenities, setAmenities] = useState(
-    unit?.amenities ? unit.amenities.split(",").map((a) => a.trim()) : []
+    unit?.amenities ? unit.amenities.split(",").map(a => a.trim()) : []
   );
-  const [modal, setModal] = useState(null); 
+  const [modal, setModal] = useState(null);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState(false);
 
@@ -58,139 +60,157 @@ export default function UnitDetail() {
 
   if (!unit || !formData) return null;
 
-  const handleChange = (e) =>
+  const handleChange = e =>
     setFormData({
       ...formData,
-      [e.target.name]: e.target.value,
+      [e.target.name]: e.target.value
     });
 
+const handleNewPhoto = (newUrl) => {
+  const currentUrls = formData.urls_fotos
+    ? formData.urls_fotos.split(",").map(u => u.trim()).filter(u => u.length > 0)
+    : [];
 
+  const updatedUrls = [...currentUrls, newUrl];
 
-  // Preparo el objeto que envía al backend, con tipos correctos
- const dataToSend = {
-  id: formData.id,
-  rooms: Number(formData.rooms),
-  beds: Number(formData.beds),
-  bathrooms: Number(formData.bathrooms),
-  description: formData.description,
-  price: Number(formData.price),
-  amenities: amenities.join(", "),         
-  urls_fotos:
-    formData.urls_fotos && formData.urls_fotos.length > 0
-      ? formData.urls_fotos                    
-      : "",                                   
+  setFormData(prev => ({
+    ...prev,
+    urls_fotos: updatedUrls.join(", ")
+  }));
 };
 
-  console.log("Enviando al backend (editarUnidad):", dataToSend);
-  
+  const dataToSend = {
+    id: formData.id,
+    title: formData.title,
+    rooms: Number(formData.rooms),
+    beds: Number(formData.beds),
+    bathrooms: Number(formData.bathrooms),
+    description: formData.description,
+    price: Number(formData.price),
+    amenities: amenities.join(", "),
+    urls_fotos: formData.urls_fotos && formData.urls_fotos.length > 0 ? formData.urls_fotos : ""
+  };
 
-const confirmAction = async () => {
-  try {
-    if (modal === "edit") {
-      await fetchWithToken("/editarUnidad", {
-        method: "POST",
-        body: JSON.stringify(dataToSend),
-      });
-    } else if (modal === "delete") {
-      await fetchWithToken("/eliminarUnidad", {
-        method: "POST",
-        body: JSON.stringify({ id: formData.id }),
-      });
+  const confirmAction = async () => {
+    try {
+      if (modal === "edit") {
+        await fetchWithToken("/editarUnidad", {
+          method: "POST",
+          body: JSON.stringify(dataToSend)
+        });
+      } else if (modal === "delete") {
+        await fetchWithToken("/eliminarUnidad", {
+          method: "POST",
+          body: JSON.stringify({ id: formData.id })
+        });
+      }
+      const currentAction = modal;
+      setModal(null);
+      setSuccess(true);
+      setTimeout(() => {
+        currentAction === "delete" ? navigate("/units") : setSuccess(false);
+      }, 2000);
+    } catch (err) {
+      setError(err.message || "Error al procesar la solicitud");
     }
-console.log("JSON enviado:", JSON.stringify(dataToSend));
-    const currentAction = modal; 
+  };
 
-
-
-setModal(null);
-setSuccess(true);
-setTimeout(() => {
-  currentAction === "delete" ? navigate("/units") : setSuccess(false);
-}, 1500);
-
-  } catch (err) {
-    setError(err.message || "Error al procesar la solicitud");
-  }
-};
-
-const fotos =
-  unit.urls_fotos && unit.urls_fotos.trim() !== ""
-    ? unit.urls_fotos.split(",").map(f => f.trim()).filter(f => f !== "")
-    : [placeholder];
+  const fotos =
+    unit.urls_fotos && unit.urls_fotos.trim() !== ""
+      ? unit.urls_fotos
+          .split(",")
+          .map(f => f.trim())
+          .filter(f => f !== "")
+      : [placeholder];
 
   return (
     <>
-    <Navbar/>
-    <div className="unit-detail">
-      <button onClick={() => navigate("/units")}>Volver</button>
-      <h2>Modificar unidad</h2>
+      <Navbar />
+      <button className="back-button" onClick={() => navigate("/units")}>
+        <FaArrowLeft className="back-icon" />
+      </button>
+      <div className="unit-detail">
+        <h2 className="unit-detail__title">Modificar unidad</h2>
 
-      <PhotoCarousel fotos={fotos} />
+        <div className="unit-detail__wrapper">
+          <PhotoCarousel fotos={fotos} onUploadSuccess={handleNewPhoto} />
 
-      <label>
-        Descripción
-        <input name="description" value={formData.description} onChange={handleChange} />
-      </label>
+          <div className="unit-detail__inputs">
+            <input
+              name="title"
+              value={formData.title}
+              onChange={handleChange}
+              placeholder="Título"
+              className="unit-input"
+            />
 
-      <label>
-        Dirección
-        <input name="address" value={formData.address} onChange={handleChange} />
-      </label>
+            <input
+              name="description"
+              value={formData.description}
+              onChange={handleChange}
+              placeholder="Descripción"
+              className="unit-input"
+            />
 
-      <label>
-        Precio
-        <input
-          name="price"
-          type="number"
-          value={formData.price}
-          onChange={handleChange}
-        />
-      </label>
+            <input
+              name="address"
+              value={formData.address}
+              onChange={handleChange}
+              placeholder="Dirección"
+              className="unit-input"
+            />
 
-      {["rooms", "beds", "bathrooms"].map((field) => (
-        <label key={field}>
-          {field === "rooms"
-            ? "Habitaciones"
-            : field === "beds"
-            ? "Camas"
-            : "Baños"}
-          <select name={field} value={formData[field]} onChange={handleChange}>
-            {Array.from({ length: 10 }, (_, i) => i + 1).map((n) => (
-              <option key={n} value={n}>
-                {n}
-              </option>
-            ))}
-          </select>
-        </label>
-      ))}
+            <input
+              name="price"
+              type="number"
+              value={formData.price}
+              onChange={handleChange}
+              placeholder="Precio"
+              className="unit-input"
+            />
+            <div className="unit-detail__numeric-group">
+              {["rooms", "beds", "bathrooms"].map(field => (
+                <div key={field} className="numeric-input">
+                  <label className="numeric-label">
+                    {field === "rooms" ? "Habitaciones" : field === "beds" ? "Camas" : "Baños"}
+                  </label>
+                  <select
+                    name={field}
+                    value={formData[field]}
+                    onChange={handleChange}
+                    className="numeric-select">
+                    {Array.from({ length: 10 }, (_, i) => i + 1).map(n => (
+                      <option key={n} value={n}>
+                        {n}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              ))}
+            </div>
+          </div>
+          
+            <AmenitiesSelector all={ALL_AMENITIES} selected={amenities} onChange={setAmenities} />
+          </div>
+        
+        <div className="unit-detail__buttons">
+          <Button1 title="Modificar" onClick={() => setModal("edit")} />
+          <Button1 title="Eliminar" className="danger" onClick={() => setModal("delete")} />
+        </div>
 
-<AmenitiesSelector
-  all={ALL_AMENITIES}
-  selected={amenities}
-  onChange={setAmenities}
-/>
+        {modal && (
+          <ConfirmModal
+            text={
+              modal === "edit" ? "¿Desea confirmar los cambios?" : "¿Desea eliminar esta unidad?"
+            }
+            error={error}
+            onConfirm={confirmAction}
+            onCancel={() => setModal(null)}
+          />
+        )}
 
-
-      <div className="unit-detail__buttons">
-        <button onClick={() => setModal("edit")}>Modificar</button>
-        <button className="danger" onClick={() => setModal("delete")}>
-          Eliminar
-        </button>
+        {success && <SuccessModal message="Acción realizada correctamente." />}
       </div>
-
-      {modal && (
-         
-        <ConfirmModal
-          text={modal === "edit" ? "¿Confirmar cambios?" : "¿Eliminar unidad?"}
-          error={error}
-          onConfirm={confirmAction}
-          onCancel={() => setModal(null)}
-         
-        />
-      )}
-
-      {success && <SuccessModal message="Acción realizada correctamente." />}
-    </div>
     </>
   );
 }

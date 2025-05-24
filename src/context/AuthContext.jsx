@@ -6,14 +6,13 @@ export function AuthProvider({ children }) {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [loading, setLoading] = useState(true);
 
-  
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (token) setIsAuthenticated(true);
-    setLoading(false); 
+    setLoading(false);
   }, []);
 
-  const login = (token) => {
+  const login = token => {
     localStorage.setItem("token", token);
     setIsAuthenticated(true);
   };
