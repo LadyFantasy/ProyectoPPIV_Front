@@ -1,12 +1,10 @@
-
+// src/hooks/useFetchWithAuth.jsx
 import { useState, useEffect } from "react";
 
-export function useFetchWithAuth(url, options = {}) {
+const useFetchWithAuth = (url, options = {}) => {
   const [data, setData] = useState(null);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(true);
-
-  const optionsKey = JSON.stringify(options);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -40,7 +38,9 @@ export function useFetchWithAuth(url, options = {}) {
     };
 
     fetchData();
-  }, [url, optionsKey]); 
+  }, [url, options]);
 
   return { data, error, loading };
-}
+};
+
+export default useFetchWithAuth;
