@@ -2,6 +2,7 @@
 import { useLocation, useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { fetchWithToken } from "../utils/fetchWithToken";
+import Navbar from "../components/Navbar";
 import PhotoCarousel from "../components/PhotoCarousel";
 import ConfirmModal from "../components/ConfirmModal";
 import SuccessModal from "../components/SuccessModal";
@@ -47,7 +48,7 @@ export default function UnitDetail() {
   const [amenities, setAmenities] = useState(
     unit?.amenities ? unit.amenities.split(",").map((a) => a.trim()) : []
   );
-  const [modal, setModal] = useState(null); // "edit" | "delete" | null
+  const [modal, setModal] = useState(null); 
   const [error, setError] = useState("");
   const [success, setSuccess] = useState(false);
 
@@ -73,20 +74,19 @@ export default function UnitDetail() {
   bathrooms: Number(formData.bathrooms),
   description: formData.description,
   price: Number(formData.price),
-  amenities: amenities.join(", "),          //  <-- string
+  amenities: amenities.join(", "),         
   urls_fotos:
     formData.urls_fotos && formData.urls_fotos.length > 0
-      ? formData.urls_fotos                    // deja la cadena tal cual
-      : "",                                    // o cadena vacía
+      ? formData.urls_fotos                    
+      : "",                                   
 };
 
   console.log("Enviando al backend (editarUnidad):", dataToSend);
-  console.log("JSON enviado:", JSON.stringify(dataToSend));
+  
 
 const confirmAction = async () => {
   try {
     if (modal === "edit") {
-      console.log("JSON enviado:", JSON.stringify(dataToSend));
       await fetchWithToken("/editarUnidad", {
         method: "POST",
         body: JSON.stringify(dataToSend),
@@ -97,12 +97,17 @@ const confirmAction = async () => {
         body: JSON.stringify({ id: formData.id }),
       });
     }
+console.log("JSON enviado:", JSON.stringify(dataToSend));
+    const currentAction = modal; 
 
-    setModal(null);
-    setSuccess(true);
-    setTimeout(() => {
-      modal === "delete" ? navigate("/units") : setSuccess(false);
-    }, 1500);
+
+
+setModal(null);
+setSuccess(true);
+setTimeout(() => {
+  currentAction === "delete" ? navigate("/units") : setSuccess(false);
+}, 1500);
+
   } catch (err) {
     setError(err.message || "Error al procesar la solicitud");
   }
@@ -114,6 +119,8 @@ const fotos =
     : [placeholder];
 
   return (
+    <>
+    <Navbar/>
     <div className="unit-detail">
       <button onClick={() => navigate("/units")}>Volver</button>
       <h2>Modificar unidad</h2>
@@ -172,15 +179,18 @@ const fotos =
       </div>
 
       {modal && (
+         
         <ConfirmModal
           text={modal === "edit" ? "¿Confirmar cambios?" : "¿Eliminar unidad?"}
           error={error}
           onConfirm={confirmAction}
           onCancel={() => setModal(null)}
+         
         />
       )}
 
       {success && <SuccessModal message="Acción realizada correctamente." />}
     </div>
+    </>
   );
 }

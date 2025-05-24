@@ -5,10 +5,17 @@ export async function fetchWithToken(endpoint, options = {}) {
   const headers = {
     "Content-Type": "application/json",
     Authorization: `Bearer ${token}`,
-    ...(options.headers || {})
+    ...(options.headers || {}),
   };
 
   const res = await fetch(`${BASE}${endpoint}`, { ...options, headers });
+
   if (!res.ok) throw new Error(`Error ${res.status}`);
-  return res.json();
+
+  const contentType = res.headers.get("content-type");
+  if (contentType && contentType.includes("application/json")) {
+    return await res.json();
+  } else {
+    return res.text(); // o res.text() si esperás texto plano
+  }
 }
