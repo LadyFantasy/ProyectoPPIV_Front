@@ -80,6 +80,7 @@ const handleNewPhoto = (newUrl) => {
 };
 
   const dataToSend = {
+    address: formData.address,
     id: formData.id,
     title: formData.title,
     rooms: Number(formData.rooms),
@@ -90,7 +91,7 @@ const handleNewPhoto = (newUrl) => {
     amenities: amenities.join(", "),
     urls_fotos: formData.urls_fotos && formData.urls_fotos.length > 0 ? formData.urls_fotos : ""
   };
-
+console.log("Datos a enviar:", dataToSend);
   const confirmAction = async () => {
     try {
       if (modal === "edit") {
