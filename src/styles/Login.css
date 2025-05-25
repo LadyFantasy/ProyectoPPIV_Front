@@ -124,7 +124,7 @@
 .login-error {
   color: red;
   font-size: 1.5rem;
-  margin-top: 2rem;
+  margin: 2rem 0;
   text-align: center;
   background-color: #fdebeb;
   border: 1px solid red;
@@ -132,33 +132,8 @@
   border-radius: 0.5rem;
   width: 100%;
 }
-.login-button{
-  all: unset;
-  box-sizing: border-box;
-  font-family: var(--font-base);
-  font-size: 1.8rem;
-  text-align: center;
-  background-color: var(--color-secondary);
-  color: white;
-  border-radius: .5rem;
-  padding: 1.2rem 3.5rem;
-  margin-top: 2rem;
-  cursor: pointer;
-  width: 100%;
-  transition: all 0.3s ease;
-}
 
-.login-button:hover {
-  background-color: var(--color-primary);
-  color: white;
-  
-}
 
-.login-button:active {
-  background-color: var(--color-primary); 
-  transform: scale(0.98); 
-  box-shadow: 0 0 8px rgba(0, 0, 0, 0.24); 
-}
 
 .login-login_pass{
   color: var(--color-primary);

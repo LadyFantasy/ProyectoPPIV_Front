@@ -5,11 +5,9 @@ import Button1 from "./Button1";
 export default function AmenitiesSelector({ all, selected, onChange }) {
   const [open, setOpen] = useState(false);
 
-  const toggleAmenity = (amenity) => {
+  const toggleAmenity = amenity => {
     onChange(
-      selected.includes(amenity)
-        ? selected.filter((a) => a !== amenity)
-        : [...selected, amenity]
+      selected.includes(amenity) ? selected.filter(a => a !== amenity) : [...selected, amenity]
     );
   };
 
@@ -18,14 +16,13 @@ export default function AmenitiesSelector({ all, selected, onChange }) {
       <Button1
         type="button"
         className="button1 amenities-toggle"
-        onClick={() => setOpen((o) => !o)} title="Comodidades"
+        onClick={() => setOpen(o => !o)}
+        title="Comodidades"
       />
-    
-   
 
       {open && (
         <div className="amenities-options">
-          {all.map((a) => (
+          {all.map(a => (
             <label key={a} className="amenity-option">
               <input
                 className="amenity-checkbox"

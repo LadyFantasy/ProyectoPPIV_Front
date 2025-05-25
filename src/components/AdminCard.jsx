@@ -1,4 +1,4 @@
-import "../styles/AdminCard.css"; 
+import "../styles/AdminCard.css";
 
 function AdminCard({ title, onClick, className = "" }) {
   return (

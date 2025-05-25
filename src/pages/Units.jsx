@@ -27,7 +27,7 @@ export default function Units() {
     fetchUnits();
   }, []);
 
-  if (loading) return <p className="loading"  >Cargando unidades...</p>;
+  if (loading) return <p className="loading">Cargando unidades...</p>;
   if (error) return <p>Error: {error}</p>;
 
   return (

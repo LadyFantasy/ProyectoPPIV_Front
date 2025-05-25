@@ -1,4 +1,4 @@
-import  "../styles/Navbar.css"
+import "../styles/Navbar.css";
 import { FiHome, FiLogOut } from "react-icons/fi";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
@@ -14,13 +14,16 @@ const Navbar = () => {
 
   return (
     <nav className="navbar__wrapper">
-      <div className="navbar-title__wrapper" onClick={() => navigate("/admin")} style={{cursor: 'pointer'}}>
+      <div
+        className="navbar-title__wrapper"
+        onClick={() => navigate("/admin")}
+        style={{ cursor: "pointer" }}>
         <span className="navbar-title__logo">Ω</span>
         <h1 className="navbar-title__title">Omeguitas</h1>
       </div>
       <div className="navbar-icons__wrapper">
         <span className="navbar__home">
-          <FiHome onClick={() => navigate("/admin")}/>
+          <FiHome onClick={() => navigate("/admin")} />
         </span>
         <span className="navbar__logout" onClick={handleLogout}>
           <FiLogOut />
@@ -34,6 +37,6 @@ const Navbar = () => {
       </ul> */}
     </nav>
   );
-} 
+};
 
 export default Navbar;

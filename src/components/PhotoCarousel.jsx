@@ -10,14 +10,14 @@ export default function PhotoCarousel({ fotos = [], onUploadSuccess }) {
   const [message, setMessage] = useState(""); // mensaje para subir foto
 
   const prevImage = () => {
-    setCurrentIndex((prev) => (prev === 0 ? images.length - 1 : prev - 1));
+    setCurrentIndex(prev => (prev === 0 ? images.length - 1 : prev - 1));
   };
 
   const nextImage = () => {
-    setCurrentIndex((prev) => (prev === images.length - 1 ? 0 : prev + 1));
+    setCurrentIndex(prev => (prev === images.length - 1 ? 0 : prev + 1));
   };
 
-  const handleUpload = async (e) => {
+  const handleUpload = async e => {
     const file = e.target.files[0];
     if (!file) return;
     setUploading(true);
@@ -25,7 +25,7 @@ export default function PhotoCarousel({ fotos = [], onUploadSuccess }) {
 
     try {
       const url = await uploadToCloudinary(file);
-      setImages((prev) => [...prev, url]);
+      setImages(prev => [...prev, url]);
       setCurrentIndex(images.length); // mostrar la última subida
       setMessage("Foto subida correctamente");
       if (onUploadSuccess) onUploadSuccess(url);
@@ -40,11 +40,7 @@ export default function PhotoCarousel({ fotos = [], onUploadSuccess }) {
   return (
     <div className="carousel">
       <div className="carousel-image-wrapper">
-        <img
-          className="carousel-img"
-          src={images[currentIndex]}
-          alt={`Foto ${currentIndex + 1}`}
-        />
+        <img className="carousel-img" src={images[currentIndex]} alt={`Foto ${currentIndex + 1}`} />
       </div>
 
       <div className="carousel-controls">
@@ -59,13 +55,7 @@ export default function PhotoCarousel({ fotos = [], onUploadSuccess }) {
       <div className="carousel-upload">
         <label className="upload-label">
           {uploading ? "Subiendo..." : "Subir foto"}
-          <input
-            type="file"
-            accept="image/*"
-            onChange={handleUpload}
-            disabled={uploading}
-            hidden
-          />
+          <input type="file" accept="image/*" onChange={handleUpload} disabled={uploading} hidden />
         </label>
       </div>
 
