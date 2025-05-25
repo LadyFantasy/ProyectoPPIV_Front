@@ -7,4 +7,16 @@
   text-align: center;
   padding: 5rem 2rem;
   cursor: pointer;
+  transition: all 0.4s ease;
+}
+
+.admin-panel__card:hover{
+  background-color: var(--color-primary);
+  transform: scale(.98);
+
+  
+}
+
+.admin-panel__card:active{
+  outline: none;
 }
