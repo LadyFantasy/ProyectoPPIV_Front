@@ -16,6 +16,6 @@ export async function fetchWithToken(endpoint, options = {}) {
   if (contentType && contentType.includes("application/json")) {
     return await res.json();
   } else {
-    return res.text(); // o res.text() si esperás texto plano
+    return res.text(); 
   }
 }

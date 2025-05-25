@@ -18,6 +18,14 @@
     grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
     gap: 2rem;
     padding: 2rem;
-    max-width: 1800px;
+    max-width: 180rem;
     margin: 0 auto;
+    border-radius: 8px;
+    background-color: var(--color-secondary-light);
+}
+
+.loading{
+    font-size: 1.8rem;
+    color: var(--color-secondary);
+    margin: 4rem;
 }

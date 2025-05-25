@@ -13,9 +13,22 @@ import placeholder from "../assets/casita.jpg";
 import "../styles/UnitDetail.css";
 
 const ALL_AMENITIES = [
-  "aire acondicionado", "ventilador", "wifi", "hidromasaje/jacuzzi", "parking", "parrilla",
-  "piscina", "admite mascotas", "balcón", "lavarropa", "cocina", "gimnasio",
-  "incluye desayuno", "detector de humo", "blanqueria", "servicio de habitaciones"
+  "aire acondicionado",
+  "ventilador",
+  "wifi",
+  "hidromasaje/jacuzzi",
+  "parking",
+  "parrilla",
+  "piscina",
+  "admite mascotas",
+  "balcón",
+  "lavarropa",
+  "cocina",
+  "gimnasio",
+  "incluye desayuno",
+  "detector de humo",
+  "blanqueria",
+  "servicio de habitaciones"
 ];
 
 export default function UnitDetail() {
@@ -30,7 +43,6 @@ export default function UnitDetail() {
   const [error, setError] = useState("");
   const [success, setSuccess] = useState(false);
 
-  // Buscar unidad por ID si no viene del estado
   useEffect(() => {
     if (!unit && id) {
       const fetchUnit = async () => {
@@ -47,7 +59,6 @@ export default function UnitDetail() {
     }
   }, [unit, id, navigate]);
 
-  // Inicializar formData y amenities a partir de unit
   useEffect(() => {
     if (unit) {
       setFormData({
@@ -64,17 +75,17 @@ export default function UnitDetail() {
   if (!formData) return null;
 
   const handleChange = e =>
-    setFormData(prev => ({
-      ...prev,
+    setFormData({
+      ...formData,
       [e.target.name]: e.target.value
-    }));
+    });
 
   const handleNewPhoto = newUrl => {
     const currentUrls = formData.urls_fotos
       ? formData.urls_fotos
           .split(",")
           .map(u => u.trim())
-          .filter(Boolean)
+          .filter(u => u.length > 0)
       : [];
     const updatedUrls = [...currentUrls, newUrl];
     setFormData(prev => ({
@@ -93,7 +104,7 @@ export default function UnitDetail() {
     description: formData.description,
     price: Number(formData.price),
     amenities: amenities.join(", "),
-    urls_fotos: formData.urls_fotos?.length > 0 ? formData.urls_fotos : ""
+    urls_fotos: formData.urls_fotos && formData.urls_fotos.length > 0 ? formData.urls_fotos : ""
   };
 
   const confirmAction = async () => {
@@ -105,20 +116,18 @@ export default function UnitDetail() {
           body: JSON.stringify(dataToSend)
         });
       } else if (modal === "delete") {
+        console.log("Datos enviados:", dataToSend);
         await fetchWithToken("/eliminarUnidad", {
           method: "POST",
           body: JSON.stringify({ id: formData.id })
         });
       }
-
       const currentAction = modal;
       setModal(null);
       setSuccess(true);
-
       setTimeout(() => {
         currentAction === "delete" ? navigate("/units") : setSuccess(false);
       }, 2000);
-
     } catch (err) {
       setError(err.message || "Error al procesar la solicitud");
     }
@@ -128,7 +137,7 @@ export default function UnitDetail() {
     ? formData.urls_fotos
         .split(",")
         .map(f => f.trim())
-        .filter(Boolean)
+        .filter(f => f !== "")
     : [placeholder];
 
   return (
@@ -137,7 +146,6 @@ export default function UnitDetail() {
       <button className="back-button" onClick={() => navigate("/units")}>
         <FaArrowLeft className="back-icon" />
       </button>
-
       <div className="unit-detail">
         <h2 className="unit-detail__title">Modificar unidad</h2>
 
@@ -174,23 +182,17 @@ export default function UnitDetail() {
               placeholder="Precio"
               className="unit-input"
             />
-
             <div className="unit-detail__numeric-group">
               {["rooms", "beds", "bathrooms"].map(field => (
                 <div key={field} className="numeric-input">
                   <label className="numeric-label">
-                    {field === "rooms"
-                      ? "Habitaciones"
-                      : field === "beds"
-                      ? "Camas"
-                      : "Baños"}
+                    {field === "rooms" ? "Habitaciones" : field === "beds" ? "Camas" : "Baños"}
                   </label>
                   <select
                     name={field}
                     value={formData[field]}
                     onChange={handleChange}
-                    className="numeric-select"
-                  >
+                    className="numeric-select">
                     {Array.from({ length: 10 }, (_, i) => i + 1).map(n => (
                       <option key={n} value={n}>
                         {n}
@@ -213,9 +215,7 @@ export default function UnitDetail() {
         {modal && (
           <ConfirmModal
             text={
-              modal === "edit"
-                ? "¿Desea confirmar los cambios?"
-                : "¿Desea eliminar esta unidad?"
+              modal === "edit" ? "¿Desea confirmar los cambios?" : "¿Desea eliminar esta unidad?"
             }
             error={error}
             onConfirm={confirmAction}
