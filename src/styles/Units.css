@@ -29,8 +29,8 @@
 .units-grid {
     display: flex;
     flex-wrap: wrap;
-    gap: 2rem;
-    padding: 2rem;
+    gap: 3rem;
+    padding: 4rem;
     margin: 0 2rem;
     border-radius: 1rem;
     background-color: var(--color-secondary-light);
