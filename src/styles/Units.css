@@ -1,8 +1,22 @@
 .units-page {
-    padding: 2rem;
-    padding-top: calc(3rem + 4rem); /* altura del navbar + padding extra */
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 3rem;
+    padding-top: calc(3rem + 4rem);
+    /* altura del navbar + padding extra */
     background-color: #ffffff;
     min-height: 100vh;
+}
+
+.units-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    max-width: 180rem;
+    padding: 0 2rem;
 }
 
 .units-page h2 {
@@ -22,10 +36,4 @@
     margin: 0 auto;
     border-radius: 8px;
     background-color: var(--color-secondary-light);
-}
-
-.loading{
-    font-size: 1.8rem;
-    color: var(--color-secondary);
-    margin: 4rem;
 }

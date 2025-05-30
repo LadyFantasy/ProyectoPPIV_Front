@@ -16,8 +16,8 @@ const useFetchWithAuth = (url, options = {}) => {
           headers: {
             ...(options.headers || {}),
             Authorization: `Bearer ${token}`,
-            "Content-Type": "application/json",
-          },
+            "Content-Type": "application/json"
+          }
         });
 
         if (response.status === 401) {
@@ -30,7 +30,6 @@ const useFetchWithAuth = (url, options = {}) => {
 
         const json = await response.json();
         setData(json);
-        
       } catch (err) {
         console.log("error en useFetchWithAuth", err);
         setError(err.message || "Error desconocido");
@@ -40,7 +39,7 @@ const useFetchWithAuth = (url, options = {}) => {
     };
 
     fetchData();
-  }, [url, options]);
+  }, [url, JSON.stringify(options)]); // Ahora observa cambios en options
 
   return { data, error, loading };
 };

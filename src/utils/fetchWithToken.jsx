@@ -1,16 +1,15 @@
 //utils/fetchWithToken.jsx
-
-const BASE = "https://proyectoppvi.onrender.com";
+import config from "../config";
 
 export async function fetchWithToken(endpoint, options = {}) {
   const token = localStorage.getItem("token");
   const headers = {
     "Content-Type": "application/json",
     Authorization: `Bearer ${token}`,
-    ...(options.headers || {}),
+    ...(options.headers || {})
   };
 
-  const res = await fetch(`${BASE}${endpoint}`, { ...options, headers });
+  const res = await fetch(`${config.baseUrl}${endpoint}`, { ...options, headers });
 
   if (!res.ok) throw new Error(`Error ${res.status}`);
 
@@ -18,6 +17,6 @@ export async function fetchWithToken(endpoint, options = {}) {
   if (contentType && contentType.includes("application/json")) {
     return await res.json();
   } else {
-    return res.text(); 
+    return res.text();
   }
 }

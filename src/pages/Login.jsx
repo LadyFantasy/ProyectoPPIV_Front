@@ -5,12 +5,13 @@ import { useAuth } from "../context/AuthContext";
 import "../styles/Login.css";
 import { FiEye, FiEyeOff } from "react-icons/fi";
 import Button1 from "../components/Button1";
+import config from "../config";
 
 function Login() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
-  const [error, setError] = useState(""); 
+  const [error, setError] = useState("");
   const navigate = useNavigate();
   const { login } = useAuth();
 
@@ -19,7 +20,7 @@ function Login() {
 
     try {
       console.log("Enviando al backend:", JSON.stringify({ username, password }));
-      const response = await fetch("https://proyectoppvi.onrender.com/login", {
+      const response = await fetch(`${config.baseUrl}/login`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json"
@@ -30,7 +31,7 @@ function Login() {
       const data = await response.json();
 
       if (response.status === 200) {
-        login(data.access_token);
+        login(data.access_token, username);
         navigate("/admin");
       } else if (response.status === 401) {
         setError("Usuario o contraseña incorrectos");
@@ -83,8 +84,8 @@ function Login() {
             </button>
           </div>
           {error && <p className="login-error">{error}</p>}
-          {} <Button1 type="submit" title="Ingresar" />
-        </form>{" "}
+          <Button1 type="submit" title="Ingresar" />
+        </form>
         <h4 className="login-login_pass">Olvidé mi contraseña</h4>
         {/* TODO Agregar en botón de "Olvidé mi contraseña" link a algún lado
             TODO Agregar un botón de "Crear cuenta" */}

@@ -1,6 +1,5 @@
-// src/pages/UnitDetail.jsx
-import { useParams, useNavigate } from "react-router-dom";
-import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { useState } from "react";
 import { fetchWithToken } from "../utils/fetchWithToken";
 import Navbar from "../components/Navbar";
 import PhotoCarousel from "../components/PhotoCarousel";
@@ -13,76 +12,22 @@ import placeholder from "../assets/casita.jpg";
 import { ALL_AMENITIES } from "../constants/amenities";
 import "../styles/UnitDetail.css";
 
-export default function UnitDetail() {
-  const { id } = useParams();
+function AddUnit() {
   const navigate = useNavigate();
-
-  const [unit, setUnit] = useState(null);
-  const [formData, setFormData] = useState(null);
+  const [formData, setFormData] = useState({
+    title: "",
+    description: "",
+    address: "",
+    price: "",
+    rooms: 1,
+    beds: 1,
+    bathrooms: 1,
+    urls_fotos: ""
+  });
   const [amenities, setAmenities] = useState([]);
   const [modal, setModal] = useState(null);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState(false);
-  const [loading, setLoading] = useState(true);
-  const [isDeleting, setIsDeleting] = useState(false);
-
-  // Añadir un useEffect para monitorear cambios en success
-  useEffect(() => {
-    console.log("Estado de success cambió:", success);
-  }, [success]);
-
-  const fetchUnit = async () => {
-    try {
-      console.log("Fetching unit with id:", id);
-      const data = await fetchWithToken(`/api/terceros/units/?id=${id}`);
-      console.log("Datos recibidos del backend:", data);
-      if (Array.isArray(data) && data.length > 0) {
-        setUnit(data[0]);
-      }
-      setLoading(false);
-    } catch (err) {
-      console.error("Error al obtener la unidad:", err);
-      navigate("/units");
-    }
-  };
-
-  // Cargar datos al montar el componente
-  useEffect(() => {
-    console.log("Componente montado, cargando datos...");
-    fetchUnit();
-  }, [id]);
-
-  useEffect(() => {
-    if (unit) {
-      setFormData({
-        ...unit,
-        title: unit.title || "",
-        address: unit.address || "",
-        bathrooms: unit.bathrooms || 1,
-        urls_fotos: unit.urls_fotos || ""
-      });
-      // Clean up amenities string by removing extra quotes and escape characters
-      const cleanAmenities = unit.amenities
-        ? unit.amenities
-            .replace(/\\/g, "") // Remove escape characters
-            .replace(/"/g, "") // Remove quotes
-            .split(",")
-            .map(a => a.trim())
-            .filter(a => a.length > 0)
-        : [];
-      setAmenities(cleanAmenities);
-    }
-  }, [unit]);
-
-  if (loading) {
-    return (
-      <div className="loading">
-        <p>Cargando...</p>
-      </div>
-    );
-  }
-
-  if (!formData) return null;
 
   const handleChange = e =>
     setFormData({
@@ -106,7 +51,6 @@ export default function UnitDetail() {
 
   const dataToSend = {
     address: formData.address,
-    id: formData.id,
     title: formData.title,
     rooms: Number(formData.rooms),
     beds: Number(formData.beds),
@@ -119,27 +63,14 @@ export default function UnitDetail() {
 
   const confirmAction = async () => {
     try {
-      if (modal === "edit") {
-        console.log("Datos enviados al backend:", dataToSend);
-        const response = await fetchWithToken("/editarUnidad", {
-          method: "POST",
-          body: JSON.stringify(dataToSend)
-        });
-        console.log("Respuesta del backend al editar:", response);
-        // Recargar los datos desde el backend
-        await fetchUnit();
-        setModal(null);
-        setSuccess(true);
-      } else if (modal === "delete") {
-        console.log("Datos enviados:", dataToSend);
-        await fetchWithToken("/eliminarUnidad", {
-          method: "POST",
-          body: JSON.stringify({ id: formData.id })
-        });
-        setModal(null);
-        setIsDeleting(true);
-        setSuccess(true);
-      }
+      console.log("Datos enviados al backend:", dataToSend);
+      const response = await fetchWithToken("/creaUnidad", {
+        method: "POST",
+        body: JSON.stringify(dataToSend)
+      });
+      console.log("Respuesta del backend al crear:", response);
+      setModal(null);
+      setSuccess(true);
     } catch (err) {
       setError(err.message || "Error al procesar la solicitud");
     }
@@ -159,7 +90,7 @@ export default function UnitDetail() {
         <FaArrowLeft className="back-icon" />
       </button>
       <div className="unit-detail">
-        <h2 className="unit-detail__title">Modificar unidad</h2>
+        <h2 className="unit-detail__title">Agregar nueva unidad</h2>
 
         <div className="unit-detail__wrapper">
           <PhotoCarousel fotos={fotos} onUploadSuccess={handleNewPhoto} />
@@ -220,15 +151,12 @@ export default function UnitDetail() {
         </div>
 
         <div className="unit-detail__buttons">
-          <Button1 title="Modificar" onClick={() => setModal("edit")} />
-          <Button1 title="Eliminar" className="danger" onClick={() => setModal("delete")} />
+          <Button1 title="Crear unidad" onClick={() => setModal("create")} />
         </div>
 
         {modal && (
           <ConfirmModal
-            text={
-              modal === "edit" ? "¿Desea confirmar los cambios?" : "¿Desea eliminar esta unidad?"
-            }
+            text="¿Desea crear esta nueva unidad?"
             error={error}
             onConfirm={confirmAction}
             onCancel={() => setModal(null)}
@@ -237,17 +165,11 @@ export default function UnitDetail() {
 
         {success && (
           <SuccessModal
-            message={
-              isDeleting
-                ? "La unidad se ha eliminado correctamente"
-                : "Los cambios se han guardado correctamente"
-            }
+            message="La unidad se ha creado correctamente"
             onClose={() => {
               console.log("Cerrando modal de éxito");
               setSuccess(false);
-              if (isDeleting) {
-                navigate("/units");
-              }
+              navigate("/units");
             }}
           />
         )}
@@ -255,3 +177,5 @@ export default function UnitDetail() {
     </>
   );
 }
+
+export default AddUnit;

@@ -1,3 +1,4 @@
+//components/ConfirmModal.jsx
 import "../styles/modal.css";
 import Button1 from "./Button1";
 

@@ -1,10 +1,29 @@
 import { useNavigate } from "react-router-dom";
+import { useState } from "react";
 import AdminCard from "../components/AdminCard";
+import SuccessModal from "../components/SuccessModal";
+import { fetchWithToken } from "../utils/fetchWithToken";
 import "../styles/AdminPanel.css";
 import Navbar from "../components/Navbar";
 
 function AdminPanel() {
   const navigate = useNavigate();
+  const [showSuccessModal, setShowSuccessModal] = useState(false);
+  const [error, setError] = useState("");
+
+  const handleGenerateReports = async () => {
+    try {
+      const response = await fetchWithToken("/informes");
+      if (response && response.message) {
+        setShowSuccessModal(true);
+      } else {
+        setError("Error al generar los informes");
+      }
+    } catch (error) {
+      console.error("Error generating reports:", error);
+      setError("Error al generar los informes");
+    }
+  };
 
   const adminCards = [
     {
@@ -21,7 +40,7 @@ function AdminPanel() {
     },
     {
       title: "Generar informes",
-      route: "#"
+      onClick: handleGenerateReports
     }
   ];
 
@@ -35,12 +54,16 @@ function AdminPanel() {
             <AdminCard
               key={index}
               title={card.title}
-              onClick={() => navigate(card.route)}
+              onClick={card.onClick || (() => navigate(card.route))}
               className="admin-panel__card"
             />
           ))}
         </div>
       </div>
+      {showSuccessModal && (
+        <SuccessModal message="Los informes fueron enviados a su correo electrónico" />
+      )}
+      {error && <div className="error-message">{error}</div>}
     </>
   );
 }

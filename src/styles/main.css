@@ -1,9 +1,10 @@
-
 @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap');
 
 
 /***** RESET BÁSICO *****/
-*, *::before, *::after {
+*,
+*::before,
+*::after {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
@@ -20,17 +21,25 @@ body {
   font-family: var(--font-base, sans-serif);
 }
 
-img, picture, video, canvas, svg {
+img,
+picture,
+video,
+canvas,
+svg {
   display: block;
   max-width: 100%;
 }
 
-input, button, textarea, select {
+input,
+button,
+textarea,
+select {
   font: inherit;
-  
+
 }
 
-ul, ol {
+ul,
+ol {
   list-style: none;
 }
 
@@ -39,15 +48,21 @@ a {
   color: inherit;
 }
 
-p, h1, h2, h3, h4, h5, h6 {
+p,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
   overflow-wrap: break-word;
 }
 
 /***** VARIABLES CSS *****/
 :root {
-  
+
   /* Colores base */
-  --color-primary: #39818E;       
+  --color-primary: #39818E;
   --color-secondary: #A3C3C8;
   --color-secondary-light: #defbff;
   --color-danger: #d32f2f;
@@ -57,9 +72,15 @@ p, h1, h2, h3, h4, h5, h6 {
 
   /* Tipografía */
   --font-base: 'Nunito', system-ui, sans-serif;
- 
-  }
 
+}
 
-
- 
+.loading {
+  font-size: 1.8rem;
+  color: var(--color-secondary);
+  margin: 4rem;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}

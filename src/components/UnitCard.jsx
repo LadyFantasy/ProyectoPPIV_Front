@@ -14,7 +14,7 @@ export default function UnitCard({ unit }) {
         <h3 className="unit-card__title">{unit.description}</h3>
 
       
-        <p className="unit-card__address">{unit.address ? unit.address: "calle fea"}</p>
+        <p className="unit-card__address">{unit.address ? unit.address: "Calle falsa 123"}</p>
 
         <p className="unit-card__price">${parseFloat(unit.price).toFixed(2)}</p>
       </div>

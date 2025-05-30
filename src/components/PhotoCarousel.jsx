@@ -1,4 +1,6 @@
-import { useState } from "react";
+//components/ConfirmModal.jsx
+
+import { useState, useEffect } from "react";
 import placeholder from "../assets/casita.jpg";
 import { uploadToCloudinary } from "../utils/uploadToCloudinary";
 import "../styles/PhotoCarousel.css";
@@ -8,6 +10,11 @@ export default function PhotoCarousel({ fotos = [], onUploadSuccess }) {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [uploading, setUploading] = useState(false);
   const [message, setMessage] = useState(""); // mensaje para subir foto
+
+  // Actualizar imágenes cuando cambian las fotos
+  useEffect(() => {
+    setImages(fotos.length ? fotos : [placeholder]);
+  }, [fotos]);
 
   const prevImage = () => {
     setCurrentIndex(prev => (prev === 0 ? images.length - 1 : prev - 1));

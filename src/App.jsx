@@ -1,26 +1,25 @@
 // App.jsx
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Login from "./pages/Login";
-import AdminUnits from "./pages/Units";
 import AdminPanel from "./pages/AdminPanel";
+import Units from "./pages/Units";
 import UnitDetail from "./pages/UnitDetail";
-
-import "./styles/main.css";
+import AddUnit from "./pages/AddUnit";
 import { AuthProvider } from "./context/AuthContext";
 import PrivateRoute from "./components/PrivateRoute";
+import "./styles/main.css";
 
 function App() {
   return (
-    <BrowserRouter>
+    <Router>
       <AuthProvider>
         <Routes>
-          <Route path="/" element={<Login />} />
+          <Route path="/login" element={<Login />} />
           <Route
             path="/admin"
             element={
               <PrivateRoute>
-                {" "}
-                <AdminPanel />{" "}
+                <AdminPanel />
               </PrivateRoute>
             }
           />
@@ -28,8 +27,7 @@ function App() {
             path="/units"
             element={
               <PrivateRoute>
-                {" "}
-                <AdminUnits />{" "}
+                <Units />
               </PrivateRoute>
             }
           />
@@ -37,14 +35,21 @@ function App() {
             path="/units/:id"
             element={
               <PrivateRoute>
-                {" "}
-                <UnitDetail />{" "}
+                <UnitDetail />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/units/add"
+            element={
+              <PrivateRoute>
+                <AddUnit />
               </PrivateRoute>
             }
           />
         </Routes>
       </AuthProvider>
-    </BrowserRouter>
+    </Router>
   );
 }
 
