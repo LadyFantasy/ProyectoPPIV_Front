@@ -41,26 +41,13 @@
   background-color: var(--color-secondary);
 }
 
-
-.carousel-upload {
+.carousel-actions {
   margin-top: 1rem;
   text-align: center;
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
 }
-
-.upload-label {
-  background-color: var(--color-primary);
-  color: white;
-  border-radius: 8px;
-  cursor: pointer;
-  display: inline-block;
-  padding: 1rem 4rem;
-  transition: background-color .4s ease;
-}
-
-.upload-label:hover {
-  background-color: var(--color-secondary);
-}
-
 
 .upload-message {
   margin-top: 0.5rem;

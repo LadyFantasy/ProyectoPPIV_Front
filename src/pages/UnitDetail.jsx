@@ -26,16 +26,13 @@ export default function UnitDetail() {
   const [loading, setLoading] = useState(true);
   const [isDeleting, setIsDeleting] = useState(false);
 
-  // Añadir un useEffect para monitorear cambios en success
   useEffect(() => {
-    console.log("Estado de success cambió:", success);
-  }, [success]);
+    fetchUnit();
+  }, [id]);
 
   const fetchUnit = async () => {
     try {
-      console.log("Fetching unit with id:", id);
       const data = await fetchWithToken(`/api/terceros/units/?id=${id}`);
-      console.log("Datos recibidos del backend:", data);
       if (Array.isArray(data) && data.length > 0) {
         setUnit(data[0]);
       }
@@ -45,12 +42,6 @@ export default function UnitDetail() {
       navigate("/units");
     }
   };
-
-  // Cargar datos al montar el componente
-  useEffect(() => {
-    console.log("Componente montado, cargando datos...");
-    fetchUnit();
-  }, [id]);
 
   useEffect(() => {
     if (unit) {
@@ -64,8 +55,8 @@ export default function UnitDetail() {
       // Clean up amenities string by removing extra quotes and escape characters
       const cleanAmenities = unit.amenities
         ? unit.amenities
-            .replace(/\\/g, "") // Remove escape characters
-            .replace(/"/g, "") // Remove quotes
+            .replace(/\\/g, "")
+            .replace(/"/g, "")
             .split(",")
             .map(a => a.trim())
             .filter(a => a.length > 0)
@@ -104,6 +95,20 @@ export default function UnitDetail() {
     }));
   };
 
+  const handleDeletePhoto = photoUrl => {
+    const currentUrls = formData.urls_fotos
+      ? formData.urls_fotos
+          .split(",")
+          .map(u => u.trim())
+          .filter(u => u.length > 0)
+      : [];
+    const updatedUrls = currentUrls.filter(url => url !== photoUrl);
+    setFormData(prev => ({
+      ...prev,
+      urls_fotos: updatedUrls.join(",")
+    }));
+  };
+
   const dataToSend = {
     address: formData.address,
     id: formData.id,
@@ -120,28 +125,26 @@ export default function UnitDetail() {
   const confirmAction = async () => {
     try {
       if (modal === "edit") {
-        console.log("Datos enviados al backend:", dataToSend);
-        const response = await fetchWithToken("/editarUnidad", {
+        await fetchWithToken("/editarUnidad", {
           method: "POST",
           body: JSON.stringify(dataToSend)
         });
-        console.log("Respuesta del backend al editar:", response);
-        // Recargar los datos desde el backend
         await fetchUnit();
         setModal(null);
         setSuccess(true);
       } else if (modal === "delete") {
-        console.log("Datos enviados:", dataToSend);
         await fetchWithToken("/eliminarUnidad", {
           method: "POST",
-          body: JSON.stringify({ id: formData.id })
+          body: JSON.stringify({ id: unit.id })
         });
-        setModal(null);
-        setIsDeleting(true);
         setSuccess(true);
+        setIsDeleting(true);
+        setModal(null);
       }
-    } catch (err) {
-      setError(err.message || "Error al procesar la solicitud");
+    } catch (error) {
+      console.error("Error detallado:", error);
+      setError(error.message || "Error al procesar la solicitud");
+      setModal(null);
     }
   };
 
@@ -162,7 +165,11 @@ export default function UnitDetail() {
         <h2 className="unit-detail__title">Modificar unidad</h2>
 
         <div className="unit-detail__wrapper">
-          <PhotoCarousel fotos={fotos} onUploadSuccess={handleNewPhoto} />
+          <PhotoCarousel
+            fotos={fotos}
+            onUploadSuccess={handleNewPhoto}
+            onDeletePhoto={handleDeletePhoto}
+          />
 
           <div className="unit-detail__inputs">
             <input
@@ -243,7 +250,6 @@ export default function UnitDetail() {
                 : "Los cambios se han guardado correctamente"
             }
             onClose={() => {
-              console.log("Cerrando modal de éxito");
               setSuccess(false);
               if (isDeleting) {
                 navigate("/units");

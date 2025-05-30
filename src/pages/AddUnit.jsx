@@ -63,12 +63,10 @@ function AddUnit() {
 
   const confirmAction = async () => {
     try {
-      console.log("Datos enviados al backend:", dataToSend);
-      const response = await fetchWithToken("/creaUnidad", {
+      await fetchWithToken("/creaUnidad", {
         method: "POST",
         body: JSON.stringify(dataToSend)
       });
-      console.log("Respuesta del backend al crear:", response);
       setModal(null);
       setSuccess(true);
     } catch (err) {
@@ -167,7 +165,6 @@ function AddUnit() {
           <SuccessModal
             message="La unidad se ha creado correctamente"
             onClose={() => {
-              console.log("Cerrando modal de éxito");
               setSuccess(false);
               navigate("/units");
             }}

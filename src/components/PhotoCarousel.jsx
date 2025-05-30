@@ -1,17 +1,19 @@
-//components/ConfirmModal.jsx
+//components/PhotoCarousel.jsx
 
 import { useState, useEffect } from "react";
 import placeholder from "../assets/casita.jpg";
 import { uploadToCloudinary } from "../utils/uploadToCloudinary";
 import "../styles/PhotoCarousel.css";
+import Button1 from "./Button1";
+import SuccessModal from "./SuccessModal";
 
-export default function PhotoCarousel({ fotos = [], onUploadSuccess }) {
+export default function PhotoCarousel({ fotos = [], onUploadSuccess, onDeletePhoto }) {
   const [images, setImages] = useState(fotos.length ? fotos : [placeholder]);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [uploading, setUploading] = useState(false);
-  const [message, setMessage] = useState(""); // mensaje para subir foto
+  const [message, setMessage] = useState("");
+  const [showSuccessModal, setShowSuccessModal] = useState(false);
 
-  // Actualizar imágenes cuando cambian las fotos
   useEffect(() => {
     setImages(fotos.length ? fotos : [placeholder]);
   }, [fotos]);
@@ -32,9 +34,11 @@ export default function PhotoCarousel({ fotos = [], onUploadSuccess }) {
 
     try {
       const url = await uploadToCloudinary(file);
-      setImages(prev => [...prev, url]);
-      setCurrentIndex(images.length); // mostrar la última subida
+      const newImages = images[0] === placeholder ? [url] : [...images, url];
+      setImages(newImages);
+      setCurrentIndex(0);
       setMessage("Foto subida correctamente");
+      setShowSuccessModal(true);
       if (onUploadSuccess) onUploadSuccess(url);
     } catch (err) {
       console.error("Error subiendo imagen:", err);
@@ -42,6 +46,28 @@ export default function PhotoCarousel({ fotos = [], onUploadSuccess }) {
     } finally {
       setUploading(false);
     }
+  };
+
+  const handleDeletePhoto = () => {
+    // Si solo queda el placeholder, no permitir eliminar
+    if (images.length === 1 && images[0] === placeholder) {
+      setMessage("No se puede eliminar la imagen por defecto");
+      return;
+    }
+
+    const photoToDelete = images[currentIndex];
+    const newImages = images.filter((_, index) => index !== currentIndex);
+
+    // Si después de eliminar no quedan fotos, agregar el placeholder
+    const finalImages = newImages.length === 0 ? [placeholder] : newImages;
+    setImages(finalImages);
+    setCurrentIndex(0); // Siempre mostrar la primera imagen después de eliminar
+
+    if (onDeletePhoto) {
+      onDeletePhoto(photoToDelete);
+    }
+    setMessage("Foto eliminada correctamente");
+    setShowSuccessModal(true);
   };
 
   return (
@@ -59,14 +85,45 @@ export default function PhotoCarousel({ fotos = [], onUploadSuccess }) {
         </button>
       </div>
 
-      <div className="carousel-upload">
-        <label className="upload-label">
-          {uploading ? "Subiendo..." : "Subir foto"}
-          <input type="file" accept="image/*" onChange={handleUpload} disabled={uploading} hidden />
-        </label>
+      <div className="carousel-actions">
+        <div>
+          <input
+            type="file"
+            accept="image/*"
+            onChange={handleUpload}
+            disabled={uploading}
+            id="file-upload"
+            hidden
+          />
+          <Button1
+            title={uploading ? "Subiendo..." : "Subir foto"}
+            disabled={uploading}
+            onClick={() => document.getElementById("file-upload").click()}
+          />
+        </div>
+        {images.length > 1 || (images.length === 1 && images[0] !== placeholder) ? (
+          <Button1
+            title="Eliminar foto"
+            onClick={handleDeletePhoto}
+            disabled={uploading}
+            className="danger"
+          />
+        ) : null}
       </div>
 
-      {message && <p className={`upload-message ${uploading ? "uploading" : ""}`}>{message}</p>}
+      {message && !showSuccessModal && (
+        <p className={`upload-message ${uploading ? "uploading" : ""}`}>{message}</p>
+      )}
+
+      {showSuccessModal && (
+        <SuccessModal
+          message={message}
+          onClose={() => {
+            setShowSuccessModal(false);
+            setMessage("");
+          }}
+        />
+      )}
     </div>
   );
 }

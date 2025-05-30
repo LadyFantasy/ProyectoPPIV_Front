@@ -31,7 +31,6 @@ const useFetchWithAuth = (url, options = {}) => {
         const json = await response.json();
         setData(json);
       } catch (err) {
-        console.log("error en useFetchWithAuth", err);
         setError(err.message || "Error desconocido");
       } finally {
         setLoading(false);
@@ -39,7 +38,7 @@ const useFetchWithAuth = (url, options = {}) => {
     };
 
     fetchData();
-  }, [url, JSON.stringify(options)]); // Ahora observa cambios en options
+  }, [url, JSON.stringify(options)]);
 
   return { data, error, loading };
 };

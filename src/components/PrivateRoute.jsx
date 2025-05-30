@@ -7,7 +7,5 @@ export default function PrivateRoute({ children }) {
   const { isAuthenticated, loading } = useAuth();
   if (loading) return null;
 
-  console.log("PrivateRoute - isAuthenticated:", isAuthenticated);
-
   return isAuthenticated ? children : <Navigate to="/" replace />;
 }

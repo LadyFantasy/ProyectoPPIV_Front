@@ -19,7 +19,6 @@ function Login() {
     e.preventDefault();
 
     try {
-      console.log("Enviando al backend:", JSON.stringify({ username, password }));
       const response = await fetch(`${config.baseUrl}/login`, {
         method: "POST",
         headers: {
@@ -74,7 +73,6 @@ function Login() {
               className="login-input login-input-bottom"
             />
 
-            {/* botón para ver o cubrir contraseña */}
             <button
               type="button"
               className="toggle-password"
@@ -87,8 +85,6 @@ function Login() {
           <Button1 type="submit" title="Ingresar" />
         </form>
         <h4 className="login-login_pass">Olvidé mi contraseña</h4>
-        {/* TODO Agregar en botón de "Olvidé mi contraseña" link a algún lado
-            TODO Agregar un botón de "Crear cuenta" */}
       </div>
     </div>
   );

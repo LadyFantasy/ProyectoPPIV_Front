@@ -29,12 +29,6 @@ const Navbar = () => {
           <FiLogOut />
         </span>
       </div>
-      {/* <ul className="navbar__links">
-        <li><a >Panel de administración</a></li>
-        <li><a >Unidades navigate()</a></li>
-        <li><a >Reservas</a></li>
-        <li><a >Admins</a></li>
-      </ul> */}
     </nav>
   );
 };
