@@ -15,6 +15,7 @@ function AdminPanel() {
     try {
       const response = await fetchWithToken("/informes");
       if (response && response.message) {
+        console.log("response.message", response.message);
         setShowSuccessModal(true);
       } else {
         setError("Error al generar los informes");

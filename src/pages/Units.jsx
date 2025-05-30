@@ -3,9 +3,8 @@ import { useNavigate } from "react-router-dom";
 import UnitCard from "../components/UnitCard";
 import Navbar from "../components/Navbar";
 import Button1 from "../components/Button1";
+import config from "../config";
 import "../styles/Units.css";
-
-const UNITS_URL = "https://proyectoppvi.onrender.com/api/terceros/units";
 
 export default function Units() {
   const navigate = useNavigate();
@@ -16,7 +15,7 @@ export default function Units() {
   useEffect(() => {
     const fetchUnits = async () => {
       try {
-        const res = await fetch(UNITS_URL);
+        const res = await fetch(`${config.baseUrl}/api/terceros/units`);
         if (!res.ok) throw new Error(`Error ${res.status}`);
         const data = await res.json();
         setUnits(data);

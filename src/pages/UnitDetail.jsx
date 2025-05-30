@@ -52,7 +52,6 @@ export default function UnitDetail() {
         bathrooms: unit.bathrooms || 1,
         urls_fotos: unit.urls_fotos || ""
       });
-      // Clean up amenities string by removing extra quotes and escape characters
       const cleanAmenities = unit.amenities
         ? unit.amenities
             .replace(/\\/g, "")
