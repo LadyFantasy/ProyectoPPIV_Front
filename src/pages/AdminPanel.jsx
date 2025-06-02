@@ -13,16 +13,14 @@ function AdminPanel() {
 
   const handleGenerateReports = async () => {
     try {
-      const response = await fetchWithToken("/informes");
-      if (response && response.message) {
-        console.log("response.message", response.message);
-        setShowSuccessModal(true);
-      } else {
-        setError("Error al generar los informes");
-      }
+      await fetchWithToken("/informes");
+      
+      setShowSuccessModal(true);
+      setError("");
     } catch (error) {
       console.error("Error generating reports:", error);
       setError("Error al generar los informes");
+      setShowSuccessModal(false);
     }
   };
 
@@ -62,7 +60,10 @@ function AdminPanel() {
         </div>
       </div>
       {showSuccessModal && (
-        <SuccessModal message="Los informes fueron enviados a su correo electrónico" />
+        <SuccessModal
+          message="Los informes fueron enviados a su correo electrónico"
+          onClose={() => setShowSuccessModal(false)}
+        />
       )}
       {error && <div className="error-message">{error}</div>}
     </>

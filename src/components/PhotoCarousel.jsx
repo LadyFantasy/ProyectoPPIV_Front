@@ -29,20 +29,36 @@ export default function PhotoCarousel({ fotos = [], onUploadSuccess, onDeletePho
   const handleUpload = async e => {
     const file = e.target.files[0];
     if (!file) return;
+
+    // Validar tipo de archivo
+    if (!file.type.startsWith("image/")) {
+      setMessage("Por favor, selecciona un archivo de imagen válido");
+      return;
+    }
+
+    // Validar tamaño (máximo 5MB)
+    const maxSize = 5 * 1024 * 1024; // 5MB en bytes
+    if (file.size > maxSize) {
+      setMessage("La imagen no debe superar los 5MB");
+      return;
+    }
+
     setUploading(true);
     setMessage("");
+    setShowSuccessModal(false);
 
     try {
       const url = await uploadToCloudinary(file);
       const newImages = images[0] === placeholder ? [url] : [...images, url];
       setImages(newImages);
-      setCurrentIndex(0);
+      setCurrentIndex(newImages.length - 1);
       setMessage("Foto subida correctamente");
       setShowSuccessModal(true);
       if (onUploadSuccess) onUploadSuccess(url);
     } catch (err) {
       console.error("Error subiendo imagen:", err);
-      setMessage("Error al subir la foto");
+      setMessage(err.message || "Error al subir la foto");
+      setShowSuccessModal(false);
     } finally {
       setUploading(false);
     }
