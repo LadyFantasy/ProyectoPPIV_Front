@@ -149,17 +149,20 @@ function PriceMultiplier() {
   const isDateAvailable = (date, currentIndex) => {
     if (!date) return true;
 
-    const dateStr = date.toISOString().split("T")[0];
+    const checkDate = new Date(date);
+    checkDate.setHours(0, 0, 0, 0);
 
     return !seasonRates.some((rate, index) => {
       if (index === currentIndex || !rate.since || !rate.until) {
         return false;
       }
 
-      const startStr = rate.since.toISOString().split("T")[0];
-      const endStr = rate.until.toISOString().split("T")[0];
+      const startDate = new Date(rate.since);
+      const endDate = new Date(rate.until);
+      startDate.setHours(0, 0, 0, 0);
+      endDate.setHours(0, 0, 0, 0);
 
-      return dateStr >= startStr && dateStr <= endStr;
+      return checkDate >= startDate && checkDate <= endDate;
     });
   };
 
