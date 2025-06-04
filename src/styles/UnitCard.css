@@ -26,16 +26,38 @@
 }
 
 .unit-card__title {
-  font-size: 1.8rem;
+  font-size: 2rem;
   font-weight: 700;
   margin-bottom: 0.5rem;
   color: var(--color-primary);
 }
 
+.unit-card__details {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 0.5rem 0;
+}
+
 .unit-card__price {
-  font-size: 1.1rem;
+  font-size: 1.5rem;
+  color: var(--color-secondary);
+  font-weight: 600;
+  background-color: var(--color-secondary-light);
+  padding: 0.3rem 0.6rem;
+  border-radius: 4px;
+}
+
+.unit-card__rooms {
+  font-size: 1.5rem;
   color: var(--color-secondary);
   font-weight: 500;
+}
+
+.unit-card__address {
+  font-size: 1.5rem;
+  color: var(--color-secondary);
+  margin: 0.5rem 0;
 }
 
 .unit-card__amenities {

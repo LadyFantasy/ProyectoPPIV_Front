@@ -1,6 +1,6 @@
 // src/pages/UnitDetail.jsx
 import { useParams, useNavigate } from "react-router-dom";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { fetchWithToken } from "../utils/fetchWithToken";
 import Navbar from "../components/Navbar";
 import PhotoCarousel from "../components/PhotoCarousel";
@@ -26,11 +26,7 @@ export default function UnitDetail() {
   const [loading, setLoading] = useState(true);
   const [isDeleting, setIsDeleting] = useState(false);
 
-  useEffect(() => {
-    fetchUnit();
-  }, [id]);
-
-  const fetchUnit = async () => {
+  const fetchUnit = useCallback(async () => {
     try {
       const data = await fetchWithToken(`/api/terceros/units/?id=${id}`);
       if (Array.isArray(data) && data.length > 0) {
@@ -41,7 +37,12 @@ export default function UnitDetail() {
       console.error("Error al obtener la unidad:", err);
       navigate("/units");
     }
-  };
+  }, [id, navigate]);
+
+  useEffect(() => {
+    fetchUnit();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [id]);
 
   useEffect(() => {
     if (unit) {

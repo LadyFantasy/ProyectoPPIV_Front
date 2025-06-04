@@ -5,6 +5,7 @@ import AdminPanel from "./pages/AdminPanel";
 import Units from "./pages/Units";
 import UnitDetail from "./pages/UnitDetail";
 import AddUnit from "./pages/AddUnit";
+import PriceMultiplier from "./pages/PriceMultiplier";
 import { AuthProvider } from "./context/AuthContext";
 import PrivateRoute from "./components/PrivateRoute";
 import "./styles/main.css";
@@ -44,6 +45,14 @@ function App() {
             element={
               <PrivateRoute>
                 <AddUnit />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/price-multiplier"
+            element={
+              <PrivateRoute>
+                <PriceMultiplier />
               </PrivateRoute>
             }
           />

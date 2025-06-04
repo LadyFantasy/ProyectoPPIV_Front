@@ -14,7 +14,7 @@ function AdminPanel() {
   const handleGenerateReports = async () => {
     try {
       await fetchWithToken("/informes");
-      
+
       setShowSuccessModal(true);
       setError("");
     } catch (error) {
@@ -36,6 +36,10 @@ function AdminPanel() {
     {
       title: "Ver reservas",
       route: "#"
+    },
+    {
+      title: "Multiplicador de precio",
+      route: "/price-multiplier"
     },
     {
       title: "Generar informes",
