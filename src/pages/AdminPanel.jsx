@@ -10,17 +10,20 @@ function AdminPanel() {
   const navigate = useNavigate();
   const [showSuccessModal, setShowSuccessModal] = useState(false);
   const [error, setError] = useState("");
+  const [isGeneratingReports, setIsGeneratingReports] = useState(false);
 
   const handleGenerateReports = async () => {
     try {
+      setIsGeneratingReports(true);
       await fetchWithToken("/informes");
-
       setShowSuccessModal(true);
       setError("");
     } catch (error) {
       console.error("Error generating reports:", error);
       setError("Error al generar los informes");
       setShowSuccessModal(false);
+    } finally {
+      setIsGeneratingReports(false);
     }
   };
 
@@ -42,8 +45,9 @@ function AdminPanel() {
       route: "/price-multiplier"
     },
     {
-      title: "Generar informes",
-      onClick: handleGenerateReports
+      title: isGeneratingReports ? "Generando informes..." : "Generar informes",
+      onClick: handleGenerateReports,
+      disabled: isGeneratingReports
     }
   ];
 
@@ -59,6 +63,7 @@ function AdminPanel() {
               title={card.title}
               onClick={card.onClick || (() => navigate(card.route))}
               className="admin-panel__card"
+              disabled={card.disabled}
             />
           ))}
         </div>
