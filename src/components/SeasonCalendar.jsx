@@ -57,15 +57,15 @@ function SeasonCalendar({ rates }) {
         <div className="price-multiplier__legend">
           <div className="price-multiplier__legend-item">
             <div className="price-multiplier__legend-color price-multiplier__legend-color--green" />
-            <span>Multiplicador 0.0x - 1.0x</span>
+            <span>Multiplicador 0x - 1x</span>
           </div>
           <div className="price-multiplier__legend-item">
             <div className="price-multiplier__legend-color price-multiplier__legend-color--yellow" />
-            <span>Multiplicador 1.0x - 2.0x</span>
+            <span>Multiplicador 1x - 2x</span>
           </div>
           <div className="price-multiplier__legend-item">
             <div className="price-multiplier__legend-color price-multiplier__legend-color--red" />
-            <span>Multiplicador 2.0x o más</span>
+            <span>Multiplicador 2x o más</span>
           </div>
         </div>
       </div>

@@ -1,0 +1,106 @@
+.admins-container {
+  padding: 2rem;
+  max-width: 75rem;
+  margin: 0 auto;
+}
+
+.admins-container h1 {
+  text-align: center;
+  margin-bottom: 2rem;
+  color: #333333;
+}
+
+.admin-form {
+  background: #FFFFFF;
+  padding: 2rem;
+  border-radius: 0.5rem;
+  box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.1);
+  margin-bottom: 2rem;
+}
+
+.admin-form h2 {
+  margin-bottom: 1.5rem;
+  color: #444444;
+}
+
+.form-group {
+  margin-bottom: 1rem;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 0.5rem;
+  color: #666666;
+}
+
+.form-group input[type="text"],
+.form-group input[type="password"] {
+  width: 100%;
+  padding: 0.5rem;
+  border: 0.0625rem solid #DDDDDD;
+  border-radius: 0.25rem;
+  font-size: 1rem;
+}
+
+.form-group.checkbox {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.form-group.checkbox label {
+  margin-bottom: 0;
+  cursor: pointer;
+}
+
+.admin-list {
+  background: #FFFFFF;
+  padding: 2rem;
+  border-radius: 0.5rem;
+  box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.1);
+}
+
+.admin-list h2 {
+  margin-bottom: 1.5rem;
+  color: #444444;
+}
+
+.admin-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(15.625rem, 1fr));
+  gap: 1rem;
+}
+
+.admin-card {
+  background: #F8F9FA;
+  padding: 1rem;
+  border-radius: 0.25rem;
+  border: 0.0625rem solid #DEE2E6;
+}
+
+.admin-card h3 {
+  margin: 0 0 0.5rem 0;
+  color: #333333;
+}
+
+.admin-card p {
+  margin: 0;
+  color: #666666;
+  font-size: 0.9rem;
+}
+
+.error-message {
+  background-color: #F8D7DA;
+  color: #721C24;
+  padding: 1rem;
+  border-radius: 0.25rem;
+  margin-top: 1rem;
+}
+
+.success-message {
+  background-color: #D4EDDA;
+  color: #155724;
+  padding: 1rem;
+  border-radius: 0.25rem;
+  margin-top: 1rem;
+}

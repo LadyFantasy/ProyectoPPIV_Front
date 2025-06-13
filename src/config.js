@@ -1,7 +1,7 @@
 // Configuración de URLs del backend
 const config = {
   // Variable que alterna entre local y remoto
-  isLocal: false,
+  isLocal: true,
 
   // URLs del backend
   urls: {

@@ -54,9 +54,59 @@ function PriceMultiplier() {
 
   const handleDateRangeChange = (index, dates) => {
     const [start, end] = dates;
+
+    // Si no hay fecha de inicio o fin, permitir la selección
+    if (!start || !end) {
+      const newRates = [...seasonRates];
+      newRates[index].since = start;
+      newRates[index].until = end;
+      setSeasonRates(newRates);
+      setError("");
+      return;
+    }
+
+    // Crear nuevas instancias de Date y normalizar
+    const newStart = new Date(start);
+    const newEnd = new Date(end);
+    newStart.setHours(0, 0, 0, 0);
+    newEnd.setHours(0, 0, 0, 0);
+
+    // Verificar que la fecha de fin sea posterior a la fecha de inicio
+    if (newEnd < newStart) {
+      setError("La fecha de fin debe ser posterior a la fecha de inicio");
+      return;
+    }
+
+    // Verificar solapamientos con otros rangos
+    const hasOverlap = seasonRates.some((rate, i) => {
+      if (i === index || !rate.since || !rate.until) return false;
+
+      const existingStart = new Date(rate.since);
+      const existingEnd = new Date(rate.until);
+      existingStart.setHours(0, 0, 0, 0);
+      existingEnd.setHours(0, 0, 0, 0);
+
+      return (
+        // El nuevo rango está completamente dentro de otro rango
+        (newStart >= existingStart && newEnd <= existingEnd) ||
+        // El nuevo rango contiene completamente a otro rango
+        (newStart <= existingStart && newEnd >= existingEnd) ||
+        // El inicio del nuevo rango está dentro de otro rango
+        (newStart >= existingStart && newStart <= existingEnd) ||
+        // El fin del nuevo rango está dentro de otro rango
+        (newEnd >= existingStart && newEnd <= existingEnd)
+      );
+    });
+
+    if (hasOverlap) {
+      setError("El rango de fechas se solapa con otro período existente");
+      return;
+    }
+
+    // Si no hay solapamiento, actualizar el estado
     const newRates = [...seasonRates];
-    newRates[index].since = start;
-    newRates[index].until = end;
+    newRates[index].since = newStart;
+    newRates[index].until = newEnd;
     setSeasonRates(newRates);
     setError("");
   };
@@ -152,10 +202,59 @@ function PriceMultiplier() {
     const checkDate = new Date(date);
     checkDate.setHours(0, 0, 0, 0);
 
+    // Obtener el rango actual que se está editando
+    const currentRate = seasonRates[currentIndex];
+    const currentStart = currentRate.since ? new Date(currentRate.since) : null;
+    const currentEnd = currentRate.until ? new Date(currentRate.until) : null;
+
+    // Si estamos validando una fecha de inicio
+    if (currentStart && !currentEnd) {
+      return !seasonRates.some((rate, index) => {
+        if (index === currentIndex || !rate.since || !rate.until) return false;
+
+        const startDate = new Date(rate.since);
+        const endDate = new Date(rate.until);
+        startDate.setHours(0, 0, 0, 0);
+        endDate.setHours(0, 0, 0, 0);
+
+        return checkDate >= startDate && checkDate <= endDate;
+      });
+    }
+
+    // Si estamos validando una fecha de fin
+    if (currentStart && currentEnd) {
+      const newStart = new Date(currentStart);
+      const newEnd = new Date(currentEnd);
+      newStart.setHours(0, 0, 0, 0);
+      newEnd.setHours(0, 0, 0, 0);
+
+      // Verificar que la fecha de fin sea posterior a la fecha de inicio
+      if (newEnd < newStart) return false;
+
+      return !seasonRates.some((rate, index) => {
+        if (index === currentIndex || !rate.since || !rate.until) return false;
+
+        const startDate = new Date(rate.since);
+        const endDate = new Date(rate.until);
+        startDate.setHours(0, 0, 0, 0);
+        endDate.setHours(0, 0, 0, 0);
+
+        return (
+          // El nuevo rango está completamente dentro de otro rango
+          (newStart >= startDate && newEnd <= endDate) ||
+          // El nuevo rango contiene completamente a otro rango
+          (newStart <= startDate && newEnd >= endDate) ||
+          // El inicio del nuevo rango está dentro de otro rango
+          (newStart >= startDate && newStart <= endDate) ||
+          // El fin del nuevo rango está dentro de otro rango
+          (newEnd >= startDate && newEnd <= endDate)
+        );
+      });
+    }
+
+    // Si estamos validando una fecha individual
     return !seasonRates.some((rate, index) => {
-      if (index === currentIndex || !rate.since || !rate.until) {
-        return false;
-      }
+      if (index === currentIndex || !rate.since || !rate.until) return false;
 
       const startDate = new Date(rate.since);
       const endDate = new Date(rate.until);

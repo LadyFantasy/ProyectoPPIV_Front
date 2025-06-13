@@ -34,7 +34,7 @@ function AdminPanel() {
     },
     {
       title: "Administrar admins",
-      route: "#"
+      route: "/admins"
     },
     {
       title: "Ver reservas",
