@@ -7,6 +7,7 @@ import UnitDetail from "./pages/UnitDetail";
 import AddUnit from "./pages/AddUnit";
 import PriceMultiplier from "./pages/PriceMultiplier";
 import Admins from "./pages/Admins";
+import RecoveryPass from "./pages/RecoveryPass";
 import { AuthProvider } from "./context/AuthContext";
 import PrivateRoute from "./components/PrivateRoute";
 import "./styles/main.css";
@@ -17,6 +18,7 @@ function App() {
       <AuthProvider>
         <Routes>
           <Route path="/" element={<Login />} />
+          <Route path="/recoveryPass" element={<RecoveryPass />} />
           <Route
             path="/admin"
             element={

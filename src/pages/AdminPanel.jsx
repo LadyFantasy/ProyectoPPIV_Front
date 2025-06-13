@@ -3,11 +3,13 @@ import { useState } from "react";
 import AdminCard from "../components/AdminCard";
 import SuccessModal from "../components/SuccessModal";
 import { fetchWithToken } from "../utils/fetchWithToken";
+import { useAuth } from "../context/AuthContext";
 import "../styles/AdminPanel.css";
 import Navbar from "../components/Navbar";
 
 function AdminPanel() {
   const navigate = useNavigate();
+  const { isSuperAdmin } = useAuth();
   const [showSuccessModal, setShowSuccessModal] = useState(false);
   const [error, setError] = useState("");
   const [isGeneratingReports, setIsGeneratingReports] = useState(false);
@@ -32,10 +34,14 @@ function AdminPanel() {
       title: "Administrar unidades",
       route: "/units"
     },
-    {
-      title: "Administrar admins",
-      route: "/admins"
-    },
+    ...(isSuperAdmin
+      ? [
+          {
+            title: "Administrar admins",
+            route: "/admins"
+          }
+        ]
+      : []),
     {
       title: "Ver reservas",
       route: "#"

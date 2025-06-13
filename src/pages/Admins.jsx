@@ -1,35 +1,25 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { fetchWithToken } from "../utils/fetchWithToken";
+import { useAuth } from "../context/AuthContext";
 import Navbar from "../components/Navbar";
 import "../styles/Admins.css";
 
 function Admins() {
   const navigate = useNavigate();
+  const { isSuperAdmin } = useAuth();
   const [admins, setAdmins] = useState({});
   const [newAdmin, setNewAdmin] = useState({ username: "", password: "", superUser: false });
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
-  const [isSuperAdmin, setIsSuperAdmin] = useState(false);
 
   useEffect(() => {
-    checkSuperAdmin();
-  }, []);
-
-  const checkSuperAdmin = async () => {
-    try {
-      const response = await fetchWithToken("/verAdmins");
-      // Si podemos ver los admins, significa que somos superadmin
-      setIsSuperAdmin(true);
-      setAdmins(response);
-    } catch {
-      setError("No tienes permisos para acceder a esta página");
-      // Redirigir al panel de admin después de 2 segundos
-      setTimeout(() => {
-        navigate("/admin");
-      }, 2000);
+    if (!isSuperAdmin) {
+      navigate("/admin");
+      return;
     }
-  };
+    loadAdmins();
+  }, [isSuperAdmin, navigate]);
 
   const handleCreateAdmin = async e => {
     e.preventDefault();
@@ -70,14 +60,7 @@ function Admins() {
   };
 
   if (!isSuperAdmin) {
-    return (
-      <>
-        <Navbar />
-        <div className="admins-container">
-          <div className="error-message">{error}</div>
-        </div>
-      </>
-    );
+    return null;
   }
 
   return (
@@ -135,6 +118,7 @@ function Admins() {
               <div key={data.id} className="admin-card">
                 <h3>{username}</h3>
                 <p>ID: {data.id}</p>
+                <p>Rol: {data.superUser ? "Super Admin" : "Admin"}</p>
               </div>
             ))}
           </div>
