@@ -12,6 +12,7 @@ function Login() {
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState("");
+  const [recoveryMessage, setRecoveryMessage] = useState("");
   const navigate = useNavigate();
   const { login } = useAuth();
 
@@ -43,6 +44,35 @@ function Login() {
     }
   };
 
+  const handleRecoveryPassword = async () => {
+    if (!username) {
+      setError("Por favor ingrese su email para recuperar la contraseña");
+      return;
+    }
+
+    try {
+      const response = await fetch(
+        `${config.baseUrl}/recoveryPass?username=${encodeURIComponent(username)}`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json"
+          }
+        }
+      );
+
+      if (response.status === 200) {
+        setRecoveryMessage("Correo electrónico enviado con éxito");
+        setError("");
+      } else {
+        setError("Error al procesar la solicitud de recuperación");
+      }
+    } catch (err) {
+      console.error("Error al conectar con el servidor:", err);
+      setError("No se pudo conectar con el servidor");
+    }
+  };
+
   return (
     <div className="login-container">
       <div className="login-logo">
@@ -58,7 +88,10 @@ function Login() {
             placeholder="Tu email..."
             value={username}
             onChange={e => setUsername(e.target.value)}
-            onFocus={() => setError("")}
+            onFocus={() => {
+              setError("");
+              setRecoveryMessage("");
+            }}
             required
             className="login-input login-input-top"
           />
@@ -68,7 +101,10 @@ function Login() {
               placeholder="Tu contraseña..."
               value={password}
               onChange={e => setPassword(e.target.value)}
-              onFocus={() => setError("")}
+              onFocus={() => {
+                setError("");
+                setRecoveryMessage("");
+              }}
               required
               className="login-input login-input-bottom"
             />
@@ -82,9 +118,12 @@ function Login() {
             </button>
           </div>
           {error && <p className="login-error">{error}</p>}
+          {recoveryMessage && <p className="login-success">{recoveryMessage}</p>}
           <Button1 type="submit" title="Ingresar" />
         </form>
-        <h4 className="login-login_pass">Olvidé mi contraseña</h4>
+        <h4 className="login-login_pass" onClick={handleRecoveryPassword}>
+          Olvidé mi contraseña
+        </h4>
       </div>
     </div>
   );

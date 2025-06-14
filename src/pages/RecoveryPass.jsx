@@ -1,52 +1,44 @@
 import { useState, useEffect } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
+import "../styles/Login.css";
 import { FiEye, FiEyeOff } from "react-icons/fi";
 import Button1 from "../components/Button1";
-import SuccessModal from "../components/SuccessModal";
 import config from "../config";
-import "../styles/Login.css";
 
-const RecoveryPass = () => {
+function RecoveryPass() {
+  const [searchParams] = useSearchParams();
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
-  const [showModal, setShowModal] = useState(false);
-  const [modalMessage, setModalMessage] = useState("");
-  const [isSuccess, setIsSuccess] = useState(false);
-  const [searchParams] = useSearchParams();
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
   const navigate = useNavigate();
 
-  const token = searchParams.get("token");
-
   useEffect(() => {
+    const token = searchParams.get("token");
     if (!token) {
-      setModalMessage("Token no válido o expirado");
-      setIsSuccess(false);
-      setShowModal(true);
-      setTimeout(() => {
-        navigate("/");
-      }, 2000);
+      setError("Token no válido");
     }
-  }, [token, navigate]);
+  }, [searchParams]);
 
   const handleSubmit = async e => {
     e.preventDefault();
+    setError("");
+    setSuccess("");
 
     if (password !== confirmPassword) {
-      setModalMessage("Las contraseñas no coinciden");
-      setIsSuccess(false);
-      setShowModal(true);
+      setError("Las contraseñas no coinciden");
       return;
     }
 
     if (password.length < 6) {
-      setModalMessage("La contraseña debe tener al menos 6 caracteres");
-      setIsSuccess(false);
-      setShowModal(true);
+      setError("La contraseña debe tener al menos 6 caracteres");
       return;
     }
 
     try {
+      const token = searchParams.get("token");
       const response = await fetch(`${config.baseUrl}/recoveryPass`, {
         method: "POST",
         headers: {
@@ -58,29 +50,16 @@ const RecoveryPass = () => {
       const data = await response.json();
 
       if (response.status === 200) {
-        setModalMessage(data.message);
-        setIsSuccess(true);
-        setShowModal(true);
-        setTimeout(() => {
-          navigate("/");
-        }, 2000);
-      } else if (response.status === 404) {
-        setModalMessage("El enlace de recuperación ha expirado o no es válido");
-        setIsSuccess(false);
-        setShowModal(true);
+        setSuccess("Contraseña modificada con éxito");
         setTimeout(() => {
           navigate("/");
         }, 2000);
       } else {
-        setModalMessage(data.message || "Error al cambiar la contraseña");
-        setIsSuccess(false);
-        setShowModal(true);
+        setError(data.message || "Error al modificar la contraseña");
       }
     } catch (err) {
       console.error("Error al conectar con el servidor:", err);
-      setModalMessage("No se pudo conectar con el servidor");
-      setIsSuccess(false);
-      setShowModal(true);
+      setError("No se pudo conectar con el servidor");
     }
   };
 
@@ -100,7 +79,10 @@ const RecoveryPass = () => {
               placeholder="Nueva contraseña..."
               value={password}
               onChange={e => setPassword(e.target.value)}
-              onFocus={() => setShowModal(false)}
+              onFocus={() => {
+                setError("");
+                setSuccess("");
+              }}
               required
               className="login-input login-input-top"
             />
@@ -116,29 +98,34 @@ const RecoveryPass = () => {
 
           <div className="login-input-wrapper">
             <input
-              type={showPassword ? "text" : "password"}
+              type={showConfirmPassword ? "text" : "password"}
               placeholder="Confirmar contraseña..."
               value={confirmPassword}
               onChange={e => setConfirmPassword(e.target.value)}
-              onFocus={() => setShowModal(false)}
+              onFocus={() => {
+                setError("");
+                setSuccess("");
+              }}
               required
               className="login-input login-input-bottom"
             />
+
+            <button
+              type="button"
+              className="toggle-password"
+              onClick={() => setShowConfirmPassword(prev => !prev)}
+              aria-label={showConfirmPassword ? "Ocultar contraseña" : "Mostrar contraseña"}>
+              {showConfirmPassword ? <FiEye /> : <FiEyeOff />}
+            </button>
           </div>
 
+          {error && <p className="login-error">{error}</p>}
+          {success && <p className="login-success">{success}</p>}
           <Button1 type="submit" title="Cambiar Contraseña" />
         </form>
       </div>
-
-      {showModal && (
-        <SuccessModal
-          message={modalMessage}
-          onClose={() => setShowModal(false)}
-          isSuccess={isSuccess}
-        />
-      )}
     </div>
   );
-};
+}
 
-export default RecoveryPass;
+export default RecoveryPass; 
