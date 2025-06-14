@@ -75,7 +75,7 @@
 .login-input-wrapper {
   position: relative;
   width: 100%;
-  margin-bottom: 1rem;
+  margin-bottom: 2rem;
 
 }
 
@@ -125,7 +125,7 @@
 .login-error {
   color: #ff0000;
   font-size: 1.6rem;
-  margin: 1rem 0 2rem 0; 
+  margin: 1rem 0 2rem 0;
   text-align: center;
   border: 1px solid #ff0000;
   padding: 1rem;
@@ -135,7 +135,7 @@
 .login-success {
   color: #00a650;
   font-size: 1.6rem;
-  margin: 1rem 0 2rem 0;  
+  margin: 1rem 0 2rem 0;
   text-align: center;
   border: 1px solid #00a650;
   padding: 1rem;

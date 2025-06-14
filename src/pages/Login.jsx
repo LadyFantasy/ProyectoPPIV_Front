@@ -62,7 +62,7 @@ function Login() {
       );
 
       if (response.status === 200) {
-        setRecoveryMessage("Correo electrónico enviado con éxito");
+        setRecoveryMessage("Recibirás un correo con tu nueva contraseña si tu email está registrado");
         setError("");
       } else {
         setError("Error al procesar la solicitud de recuperación");

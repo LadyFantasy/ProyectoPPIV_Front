@@ -86,7 +86,6 @@ function RecoveryPass() {
               required
               className="login-input login-input-top"
             />
-
             <button
               type="button"
               className="toggle-password"
@@ -95,7 +94,6 @@ function RecoveryPass() {
               {showPassword ? <FiEye /> : <FiEyeOff />}
             </button>
           </div>
-
           <div className="login-input-wrapper">
             <input
               type={showConfirmPassword ? "text" : "password"}
@@ -128,4 +126,4 @@ function RecoveryPass() {
   );
 }
 
-export default RecoveryPass; 
+export default RecoveryPass;
