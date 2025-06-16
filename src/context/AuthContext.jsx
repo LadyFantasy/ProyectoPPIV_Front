@@ -10,20 +10,22 @@ export function AuthProvider({ children }) {
 
   useEffect(() => {
     const token = localStorage.getItem("token");
-    const superAdmin = localStorage.getItem("isSuperAdmin") === "true";
+    const superAdmin = localStorage.getItem("isSuperAdmin");
     if (token) {
       setIsAuthenticated(true);
-      setIsSuperAdmin(superAdmin);
+      setIsSuperAdmin(superAdmin === "1");
     }
     setLoading(false);
   }, []);
 
-  const login = (token, username, superAdmin) => {
+  const login = async (token, username, superAdmin) => {
     localStorage.setItem("token", token);
     localStorage.setItem("username", username);
     localStorage.setItem("isSuperAdmin", superAdmin);
     setIsAuthenticated(true);
-    setIsSuperAdmin(superAdmin);
+    setIsSuperAdmin(superAdmin === "1");
+    // Disparar un evento de storage para notificar a otros componentes
+    window.dispatchEvent(new Event("storage"));
   };
 
   const logout = () => {
@@ -32,6 +34,8 @@ export function AuthProvider({ children }) {
     localStorage.removeItem("isSuperAdmin");
     setIsAuthenticated(false);
     setIsSuperAdmin(false);
+    // Disparar un evento de storage para notificar a otros componentes
+    window.dispatchEvent(new Event("storage"));
   };
 
   return (

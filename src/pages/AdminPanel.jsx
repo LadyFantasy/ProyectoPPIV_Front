@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import AdminCard from "../components/AdminCard";
 import SuccessModal from "../components/SuccessModal";
 import { fetchWithToken } from "../utils/fetchWithToken";
@@ -13,6 +13,22 @@ function AdminPanel() {
   const [showSuccessModal, setShowSuccessModal] = useState(false);
   const [error, setError] = useState("");
   const [isGeneratingReports, setIsGeneratingReports] = useState(false);
+  const [localIsSuperAdmin, setLocalIsSuperAdmin] = useState(false);
+
+  useEffect(() => {
+    const checkSuperAdmin = () => {
+      const superAdmin = localStorage.getItem("isSuperAdmin") === "1";
+      setLocalIsSuperAdmin(superAdmin);
+    };
+
+    checkSuperAdmin();
+    // Agregar un listener para cambios en localStorage
+    window.addEventListener("storage", checkSuperAdmin);
+
+    return () => {
+      window.removeEventListener("storage", checkSuperAdmin);
+    };
+  }, []);
 
   const handleGenerateReports = async () => {
     try {
@@ -34,7 +50,7 @@ function AdminPanel() {
       title: "Administrar unidades",
       route: "/units"
     },
-    ...(isSuperAdmin
+    ...(localIsSuperAdmin || isSuperAdmin
       ? [
           {
             title: "Administrar admins",
@@ -61,7 +77,6 @@ function AdminPanel() {
     <>
       <Navbar />
       <div className="admin-panel__background">
-        <h1 className="admin-panel__title">Panel principal</h1>
         <div className="admin-panel__wrapper">
           {adminCards.map((card, index) => (
             <AdminCard

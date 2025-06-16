@@ -37,7 +37,7 @@ export default function Units() {
       <Navbar />
       <div className="units-page">
         <div className="units-header">
-          <h2>Unidades</h2>
+          <h2 className="units-title">Unidades</h2>
           <Button1 title="Agregar unidad" onClick={() => navigate("/units/add")} />
         </div>
 

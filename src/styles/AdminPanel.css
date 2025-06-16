@@ -2,6 +2,7 @@
   background-color: #ffffff;
   height: 100vh;
   padding: 2rem;
+  padding-top: calc(4rem + 1rem);
 }
 
 .admin-panel__title {
@@ -12,28 +13,11 @@
   margin-top: 5rem;
 }
 
-
 .admin-panel__wrapper {
   display: grid;
   grid-template-columns: 2fr 2fr;
   grid-template-rows: 2fr 2fr;
   gap: 2rem;
   width: fit-content;
-  margin: 5rem auto;
-
-}
-
-.error-message {
-  position: fixed;
-  top: 20px;
-  left: 50%;
-  transform: translateX(-50%);
-  background-color: #ff4444;
-  color: white;
-  padding: 1rem 2rem;
-  border-radius: 4px;
-  z-index: 1000;
-  max-width: 80%;
-  text-align: center;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  margin: 7rem auto;
 }

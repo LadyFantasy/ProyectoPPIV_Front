@@ -64,7 +64,7 @@ h6 {
   /* Colores base */
   --color-primary: #39818E;
   --color-secondary: #A3C3C8;
-  --color-secondary-light: #a3c3c842;
+  --color-secondary-light: #a3c3c82c;
   --color-danger: #d32f2f;
   --color-success: #388e3c;
   /* IR AGREGANDO MÁS VARIABLES DE COLOR SI LAS NECESITAMOS */
@@ -83,4 +83,20 @@ h6 {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
+}
+
+.error-message {
+  font-size: 1.4rem;
+  position: fixed;
+  top: 3.5rem;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: #ff4444;
+  color: white;
+  padding: 1rem 2rem;
+  border-radius: 4px;
+  z-index: 1000;
+  max-width: 80%;
+  text-align: center;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }

@@ -31,7 +31,7 @@ function Login() {
       const data = await response.json();
 
       if (response.status === 200) {
-        login(data.access_token, username, data.superUser);
+        await login(data.access_token, username, data.superUser);
         navigate("/admin");
       } else if (response.status === 401) {
         setError("Usuario o contraseña incorrectos");
@@ -62,7 +62,9 @@ function Login() {
       );
 
       if (response.status === 200) {
-        setRecoveryMessage("Recibirás un correo con tu nueva contraseña si tu email está registrado");
+        setRecoveryMessage(
+          "Recibirás un correo con tu nueva contraseña si tu email está registrado"
+        );
         setError("");
       } else {
         setError("Error al procesar la solicitud de recuperación");

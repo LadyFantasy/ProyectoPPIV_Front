@@ -4,12 +4,30 @@ import { useState } from "react";
 import "../styles/modal.css";
 import Button1 from "./Button1";
 
-export default function SuccessModal({ message, onClose }) {
+export default function SuccessModal({
+  message,
+  onConfirm,
+  onClose,
+  onCancel,
+  showCancelButton = false,
+  title
+}) {
   const [isVisible, setIsVisible] = useState(true);
 
-  const handleClose = () => {
+  const handleConfirm = () => {
     setIsVisible(false);
-    onClose();
+    if (onConfirm) {
+      onConfirm();
+    } else if (onClose) {
+      onClose();
+    }
+  };
+
+  const handleCancel = () => {
+    setIsVisible(false);
+    if (onCancel) {
+      onCancel();
+    }
   };
 
   if (!isVisible) return null;
@@ -17,9 +35,11 @@ export default function SuccessModal({ message, onClose }) {
   return (
     <div className="overlay">
       <div className="modal">
+        {title && <h3>{title}</h3>}
         <p>{message}</p>
         <div className="modal-buttons">
-          <Button1 title="Aceptar" onClick={handleClose} />
+          {showCancelButton && <Button1 title="Cancelar" onClick={handleCancel} />}
+          <Button1 title="Aceptar" onClick={handleConfirm} />
         </div>
       </div>
     </div>

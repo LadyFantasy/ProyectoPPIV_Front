@@ -1,100 +1,154 @@
 .admins-container {
   padding: 2rem;
-  max-width: 75rem;
-  margin: 0 auto;
+  padding-top: calc(4rem + 1rem);
+  max-width: 1200px;
+  margin: 2rem auto;
+  min-height: calc(100vh - 6rem);
+  /* Altura total menos la altura del navbar */
+  position: relative;
 }
 
 .admins-container h1 {
-  text-align: center;
+  font-size: 2.4rem;
+  color: var(--color-primary);
   margin-bottom: 2rem;
-  color: #333333;
 }
 
-.admin-form {
-  background: #FFFFFF;
+.admins-list {
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   padding: 2rem;
-  border-radius: 0.5rem;
-  box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.1);
-  margin-bottom: 2rem;
 }
 
-.admin-form h2 {
-  margin-bottom: 1.5rem;
-  color: #444444;
-}
-
-.form-group {
+.admins-list__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   margin-bottom: 1rem;
 }
 
-.form-group label {
-  display: block;
-  margin-bottom: 0.5rem;
-  color: #666666;
+.admins-list__header h2 {
+  font-size: 2rem;
+  color: var(--color-primary);
+  margin-top: 2rem;
 }
 
-.form-group input[type="text"],
-.form-group input[type="password"] {
+.admins-list__content {
   width: 100%;
-  padding: 0.5rem;
-  border: 0.0625rem solid #DDDDDD;
-  border-radius: 0.25rem;
-  font-size: 1rem;
+  margin-top: 2rem;
 }
 
-.form-group.checkbox {
+.admins-header {
   display: flex;
-  align-items: center;
-  gap: 0.5rem;
+  justify-content: flex-end;
+  margin-bottom: 2rem;
 }
 
-.form-group.checkbox label {
-  margin-bottom: 0;
-  cursor: pointer;
+.admins-container h2 {
+  font-size: 2.5rem;
+  color: var(--color-primary);
+  margin-bottom: 1.5rem;
+}
+
+.loading-text {
+  text-align: center;
+  font-size: 1.5rem;
+  color: var(--color-primary);
+  margin: 2rem 0;
 }
 
 .admin-list {
-  background: #FFFFFF;
+  background: white;
+  border-radius: 8px;
   padding: 2rem;
-  border-radius: 0.5rem;
-  box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-.admin-list h2 {
-  margin-bottom: 1.5rem;
-  color: #444444;
-}
-
-.admin-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(15.625rem, 1fr));
-  gap: 1rem;
-}
-
-.admin-card {
-  background: #F8F9FA;
-  padding: 1rem;
-  border-radius: 0.25rem;
-  border: 0.0625rem solid #DEE2E6;
-}
-
-.admin-card h3 {
-  margin: 0 0 0.5rem 0;
-  color: #333333;
-}
-
-.admin-card p {
-  margin: 0;
-  color: #666666;
-  font-size: 0.9rem;
-}
-
-.error-message {
-  background-color: #F8D7DA;
-  color: #721C24;
-  padding: 1rem;
-  border-radius: 0.25rem;
+.admin-table {
+  width: 100%;
+  border-collapse: collapse;
   margin-top: 1rem;
+}
+
+.admin-table-header {
+  display: grid;
+  grid-template-columns: 1fr 2fr 1fr 1fr;
+  gap: 1rem;
+  padding: 1rem;
+  background-color: var(--color-secondary-light);
+  border-radius: 8px 8px 0 0;
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: var(--color-primary);
+}
+
+.admin-table-row {
+  display: grid;
+  grid-template-columns: 1fr 2fr 1fr 1fr;
+  gap: 1rem;
+  padding: 1.5rem 1rem;
+  border-bottom: 1px solid var(--color-secondary-light);
+  font-size: 1.5rem;
+  color: var(--color-primary);
+}
+
+.admin-table-row:last-child {
+  border-bottom: none;
+}
+
+.admin-table-cell {
+  display: flex;
+  align-items: center;
+}
+
+.admin-table-cell.actions {
+  display: flex;
+  gap: 1rem;
+  justify-content: flex-start;
+}
+
+.action-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0.5rem;
+  border-radius: 4px;
+  transition: background-color 0.3s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.action-button svg {
+  width: 2rem;
+  height: 2rem;
+}
+
+.action-button.edit {
+  color: var(--color-primary);
+}
+
+.action-button.edit:hover {
+  background-color: var(--color-secondary-light);
+}
+
+.action-button.delete {
+  color: #dc3545;
+}
+
+.action-button.delete:hover {
+  background-color: #f8d7da;
+}
+
+.error {
+  color: var(--color-primary);
+  text-align: center;
+  margin-top: 1rem;
+  font-size: 1.5rem;
+  padding: 1rem;
+  background-color: var(--color-secondary-light);
+  border-radius: 4px;
 }
 
 .success-message {

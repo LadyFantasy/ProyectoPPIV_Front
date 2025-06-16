@@ -1,131 +1,149 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { fetchWithToken } from "../utils/fetchWithToken";
-import { useAuth } from "../context/AuthContext";
 import Navbar from "../components/Navbar";
+import { FiTrash2, FiEdit } from "react-icons/fi";
+import SuccessModal from "../components/SuccessModal";
+import Button1 from "../components/Button1";
 import "../styles/Admins.css";
 
 function Admins() {
   const navigate = useNavigate();
-  const { isSuperAdmin } = useAuth();
   const [admins, setAdmins] = useState({});
-  const [newAdmin, setNewAdmin] = useState({ username: "", password: "", superUser: false });
   const [error, setError] = useState("");
-  const [success, setSuccess] = useState("");
+  const [showModal, setShowModal] = useState(false);
+  const [showSuccessModal, setShowSuccessModal] = useState(false);
+  const [successMessage, setSuccessMessage] = useState("");
+  const [adminToDelete, setAdminToDelete] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    if (!isSuperAdmin) {
-      navigate("/admin");
-      return;
-    }
-    loadAdmins();
-  }, [isSuperAdmin, navigate]);
+    const checkSuperAdmin = () => {
+      const superAdmin = localStorage.getItem("isSuperAdmin") === "1";
+      if (!superAdmin) {
+        navigate("/admin");
+        return false;
+      }
+      return true;
+    };
 
-  const handleCreateAdmin = async e => {
-    e.preventDefault();
+    if (checkSuperAdmin()) {
+      loadAdmins();
+    }
+  }, [navigate]);
+
+  const handleDeleteClick = (id, username) => {
+    setAdminToDelete({ id, username });
+    setShowModal(true);
+  };
+
+  const handleDeleteConfirm = async () => {
+    if (!adminToDelete) return;
+
     try {
-      const response = await fetchWithToken("/crearAdmin", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify(newAdmin)
+      const response = await fetchWithToken(`/deleteAdmin/${adminToDelete.id}`, {
+        method: "DELETE"
       });
 
-      if (response.mensaje) {
-        setSuccess(response.mensaje);
-        setNewAdmin({ username: "", password: "", superUser: false });
+      if (response.message) {
+        setSuccessMessage(response.message);
+        setShowSuccessModal(true);
         loadAdmins();
       }
     } catch {
-      setError("Error al crear el administrador");
+      setError("Error al eliminar el administrador");
+    } finally {
+      setShowModal(false);
+      setAdminToDelete(null);
     }
   };
 
-  const handleInputChange = e => {
-    const { name, value, type, checked } = e.target;
-    setNewAdmin(prev => ({
-      ...prev,
-      [name]: type === "checkbox" ? checked : value
-    }));
+  const handleCancel = () => {
+    setShowModal(false);
+    setAdminToDelete(null);
+  };
+
+  const handleSuccessClose = () => {
+    setShowSuccessModal(false);
+    setSuccessMessage("");
   };
 
   const loadAdmins = async () => {
     try {
+      setLoading(true);
       const response = await fetchWithToken("/verAdmins");
       setAdmins(response);
     } catch {
       setError("Error al cargar los administradores");
+    } finally {
+      setLoading(false);
     }
   };
-
-  if (!isSuperAdmin) {
-    return null;
-  }
 
   return (
     <>
       <Navbar />
       <div className="admins-container">
-        <h1>Administración de Administradores</h1>
-
-        {/* Formulario de creación */}
-        <div className="admin-form">
-          <h2>Crear Nuevo Administrador</h2>
-          <form onSubmit={handleCreateAdmin}>
-            <div className="form-group">
-              <label>Username:</label>
-              <input
-                type="text"
-                name="username"
-                value={newAdmin.username}
-                onChange={handleInputChange}
-                required
-              />
-            </div>
-            <div className="form-group">
-              <label>Password:</label>
-              <input
-                type="password"
-                name="password"
-                value={newAdmin.password}
-                onChange={handleInputChange}
-                required
-              />
-            </div>
-            <div className="form-group checkbox">
-              <label>
-                <input
-                  type="checkbox"
-                  name="superUser"
-                  checked={newAdmin.superUser}
-                  onChange={handleInputChange}
-                />
-                Super Usuario
-              </label>
-            </div>
-            <button type="submit" className="button1">
-              Crear Administrador
-            </button>
-          </form>
-        </div>
-
-        {/* Lista de administradores */}
-        <div className="admin-list">
-          <h2>Administradores Existentes</h2>
-          <div className="admin-grid">
-            {Object.entries(admins).map(([username, data]) => (
-              <div key={data.id} className="admin-card">
-                <h3>{username}</h3>
-                <p>ID: {data.id}</p>
-                <p>Rol: {data.superUser ? "Super Admin" : "Admin"}</p>
-              </div>
-            ))}
+        <div className="admins-list">
+          <div className="admins-list__header">
+            <h2>Administradores existentes</h2>
+            <Button1 title="Agregar administrador" onClick={() => navigate("/admins/add")} />
           </div>
+          {loading ? (
+            <p className="loading">Cargando administradores...</p>
+          ) : error ? (
+            <p className="error">{error}</p>
+          ) : (
+            <div className="admins-list__content">
+              <div className="admin-table">
+                <div className="admin-table-header">
+                  <div className="admin-table-cell">ID</div>
+                  <div className="admin-table-cell">Usuario</div>
+                  <div className="admin-table-cell">Super Usuario</div>
+                  <div className="admin-table-cell">Acciones</div>
+                </div>
+
+                {Object.entries(admins).map(([username, data]) => (
+                  <div key={data.id} className="admin-table-row">
+                    <div className="admin-table-cell">{data.id}</div>
+                    <div className="admin-table-cell">{username}</div>
+                    <div className="admin-table-cell">{data.superUser ? "Sí" : "No"}</div>
+                    <div className="admin-table-cell actions">
+                      <button
+                        className="action-button edit"
+                        onClick={() => navigate(`/admins/edit/${username}`)}>
+                        <FiEdit />
+                      </button>
+                      <button
+                        className="action-button delete"
+                        onClick={() => handleDeleteClick(data.id, username)}>
+                        <FiTrash2 />
+                      </button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
         </div>
 
-        {error && <div className="error-message">{error}</div>}
-        {success && <div className="success-message">{success}</div>}
+        {showModal && adminToDelete && (
+          <SuccessModal
+            show={showModal}
+            onConfirm={handleDeleteConfirm}
+            onCancel={handleCancel}
+            showCancelButton={true}
+            message={`¿Estás seguro de que deseas eliminar al administrador ${adminToDelete.username}?`}
+          />
+        )}
+
+        {showSuccessModal && (
+          <SuccessModal
+            show={showSuccessModal}
+            onConfirm={handleSuccessClose}
+            message={successMessage}
+          />
+        )}
       </div>
     </>
   );

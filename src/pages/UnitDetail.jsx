@@ -12,6 +12,7 @@ import { FaArrowLeft } from "react-icons/fa";
 import placeholder from "../assets/casita.jpg";
 import { ALL_AMENITIES } from "../constants/amenities";
 import "../styles/UnitDetail.css";
+import "../styles/BackButton.css";
 
 export default function UnitDetail() {
   const { id } = useParams();
@@ -158,12 +159,13 @@ export default function UnitDetail() {
   return (
     <>
       <Navbar />
-      <button className="back-button" onClick={() => navigate("/units")}>
-        <FaArrowLeft className="back-icon" />
-      </button>
+      <Button1
+        title={<FaArrowLeft className="back-icon" />}
+        onClick={() => navigate("/units")}
+        className="back-button"
+      />
       <div className="unit-detail">
         <h2 className="unit-detail__title">Modificar unidad</h2>
-
         <div className="unit-detail__wrapper">
           <PhotoCarousel
             fotos={fotos}
@@ -249,7 +251,7 @@ export default function UnitDetail() {
                 ? "La unidad se ha eliminado correctamente"
                 : "Los cambios se han guardado correctamente"
             }
-            onClose={() => {
+            onConfirm={() => {
               setSuccess(false);
               if (isDeleting) {
                 navigate("/units");

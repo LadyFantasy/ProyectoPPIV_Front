@@ -11,6 +11,7 @@ import { FaArrowLeft } from "react-icons/fa";
 import placeholder from "../assets/casita.jpg";
 import { ALL_AMENITIES } from "../constants/amenities";
 import "../styles/UnitDetail.css";
+import "../styles/BackButton.css";
 
 function AddUnit() {
   const navigate = useNavigate();
@@ -84,12 +85,13 @@ function AddUnit() {
   return (
     <>
       <Navbar />
-      <button className="back-button" onClick={() => navigate("/units")}>
-        <FaArrowLeft className="back-icon" />
-      </button>
+      <Button1
+        title={<FaArrowLeft className="back-icon" />}
+        onClick={() => navigate("/units")}
+        className="back-button"
+      />
       <div className="unit-detail">
         <h2 className="unit-detail__title">Agregar nueva unidad</h2>
-
         <div className="unit-detail__wrapper">
           <PhotoCarousel fotos={fotos} onUploadSuccess={handleNewPhoto} />
 

@@ -1,17 +1,18 @@
 .unit-detail {
   padding: 1rem;
+  padding-top: calc(4rem + 4rem);
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 3rem;
 }
 
-
 .unit-detail__title {
   font-size: 4rem;
   color: var(--color-primary);
   font-weight: 400;
-  margin-bottom: 1rem;
+  text-align: center;
+  margin: 2rem 0;
 }
 
 .unit-detail__wrapper {
@@ -35,9 +36,6 @@
   gap: 1.5rem;
 }
 
-
-
-
 .unit-input {
   width: 100%;
   padding: 0.6rem;
@@ -53,9 +51,6 @@
   border-color: var(--color-secondary);
   box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
 }
-
-
-
 
 .unit-detail__numeric-group {
   display: flex;
@@ -94,17 +89,17 @@
   align-items: center;
   cursor: pointer;
   margin: 7rem 1rem 0rem;
+  padding: 0;
 }
 
 .back-icon {
   transition: transform 0.3s ease;
+  color: var(--color-primary);
 }
 
 .back-button:hover .back-icon {
-  transform: scale(1.1);
-
+  transform: translateX(-5px) scale(1.1);
 }
-
 
 .unit-detail__buttons {
   display: flex;

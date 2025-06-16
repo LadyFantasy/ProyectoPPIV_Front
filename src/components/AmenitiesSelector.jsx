@@ -38,12 +38,7 @@ export default function AmenitiesSelector({ all, selected, onChange }) {
 
   return (
     <div className="amenities-selector" ref={selectorRef}>
-      <Button1
-        type="button"
-        className="button1 amenities-toggle"
-        onClick={() => setIsOpen(!isOpen)}
-        title="Comodidades"
-      />
+      <Button1 type="button" onClick={() => setIsOpen(!isOpen)} title="Comodidades" />
 
       {isOpen && (
         <div className="amenities-options">

@@ -73,7 +73,7 @@ function RecoveryPass() {
       <div className="login-login">
         <h2 className="login-login__title">Recuperar Contraseña</h2>
         <form onSubmit={handleSubmit} className="login-form">
-          <div className="login-input-wrapper">
+          <div style={{ position: "relative", width: "100%" }}>
             <input
               type={showPassword ? "text" : "password"}
               placeholder="Nueva contraseña..."

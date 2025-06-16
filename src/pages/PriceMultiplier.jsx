@@ -280,7 +280,7 @@ function PriceMultiplier() {
     <>
       <Navbar />
       <div className="price-multiplier">
-        <h1 className="price-multiplier__title">Multiplicadores por Temporada</h1>
+        <h1 className="price-multiplier__title">Multiplicadores por períodos</h1>
 
         <div className="price-multiplier__content">
           {seasonRates.map((rate, index) => (
@@ -299,16 +299,12 @@ function PriceMultiplier() {
 
           {seasonRates.length === 0 && (
             <div className="price-multiplier__empty-state">
-              <button onClick={handleAddRate} className="price-multiplier__add-button">
-                Agregar período
-              </button>
+              <Button1 title="Agregar período" onClick={handleAddRate} />
             </div>
           )}
 
           <div className="price-multiplier__actions">
-            <button onClick={handleAddRate} className="price-multiplier__add-button">
-              Agregar período
-            </button>
+            <Button1 title="Agregar período" onClick={handleAddRate} />
             <Button1 title="Guardar cambios" onClick={handleSubmit} />
           </div>
 

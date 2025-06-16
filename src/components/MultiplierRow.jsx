@@ -32,17 +32,19 @@ function MultiplierRow({
           }}
         />
       </div>
-      <input
-        type="number"
-        value={rate.multiplier}
-        onChange={e => onMultiplierChange(index, e.target.value)}
-        min="0.1"
-        step="0.1"
-        className="price-multiplier__multiplier-input"
-        placeholder="Multiplicador"
-      />
+      <div className="price-multiplier__date-group">
+        <input
+          type="number"
+          value={rate.multiplier}
+          onChange={e => onMultiplierChange(index, e.target.value)}
+          min="0.1"
+          step="0.1"
+          className="price-multiplier__multiplier-input"
+          placeholder="Multiplicador"
+        />
+      </div>
       <div className="price-multiplier__row-actions">
-        <button onClick={() => onRemove(index)} className="price-multiplier__remove-button">
+        <button className="price-multiplier__remove-button" onClick={() => onRemove(index)}>
           Eliminar
         </button>
       </div>
