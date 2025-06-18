@@ -12,8 +12,9 @@
 .checkin-content {
   text-align: center;
   width: 100%;
+  max-width: 800px;
   background-color: white;
-  padding: 3rem;
+  padding: 4rem;
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
@@ -22,19 +23,58 @@
   font-size: 1.8rem;
   color: var(--color-primary);
   margin: 2rem 0;
+  text-align: center;
 }
 
 .success-message {
-  color: var(--color-primary);
+  background-color: var(--color-primary);
+  padding: 3rem;
+  border-radius: 8px;
+  color: white;
 }
 
 .success-message h1 {
   font-size: 2.5rem;
-  margin-bottom: 1rem;
+  margin-bottom: 2rem;
   font-weight: 400;
+  color: white;
 }
 
 .success-message p {
   font-size: 1.8rem;
-  color: var(--color-secondary);
+  color: white;
+  margin-bottom: 2rem;
+}
+
+.success-message .unit-title {
+  font-size: 2.2rem;
+  color: white;
+  font-weight: 600;
+  margin: 1.5rem 0 2.5rem;
+}
+
+.success-message .welcome-text {
+  font-size: 1.4rem;
+  color: white;
+  margin-top: 2.5rem;
+  line-height: 1.8;
+}
+
+.error-message {
+  background-color: var(--color-primary);
+  padding: 3rem;
+  border-radius: 8px;
+  color: white;
+}
+
+.error-message h1 {
+  font-size: 2.5rem;
+  margin-bottom: 2rem;
+  font-weight: 400;
+  color: white;
+}
+
+.error-message p {
+  font-size: 1.8rem;
+  color: white;
 }

@@ -47,17 +47,31 @@ function CheckIn() {
     }
   }, [id]);
 
+  if (loading) {
+    return (
+      <div className="checkin-container">
+        <div className="loading">Procesando check-in...</div>
+      </div>
+    );
+  }
+
   return (
     <div className="checkin-container">
       <div className="checkin-content">
-        {loading ? (
-          <div className="loading">Procesando check-in...</div>
-        ) : error ? (
-          <div className="error-message">{error}</div>
+        {error ? (
+          <div className="error-message">
+            <h1>Error en el Check-in</h1>
+            <p>{error}</p>
+          </div>
         ) : success ? (
           <div className="success-message">
             <h1>¡Check-in realizado con éxito!</h1>
-            <p>Bienvenido a {unitTitle}</p>
+            <p className="unit-title">Bienvenido a {unitTitle}</p>
+            <div className="welcome-text">
+              <p>Su check-in ha sido procesado correctamente.</p>
+              <p>Esperamos que disfrute de su estadía.</p>
+              <p>Si necesita asistencia, no dude en contactar a nuestro personal.</p>
+            </div>
           </div>
         ) : null}
       </div>
