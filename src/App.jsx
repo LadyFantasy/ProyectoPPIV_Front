@@ -1,103 +1,116 @@
 // App.jsx
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { AuthProvider } from "./context/AuthContext";
+import ProtectedRoute from "./components/ProtectedRoute";
 import Login from "./pages/Login";
+import RecoveryPass from "./pages/RecoveryPass";
 import AdminPanel from "./pages/AdminPanel";
+import Admins from "./pages/Admins";
+import AdminForm from "./pages/AdminForm";
 import Units from "./pages/Units";
 import UnitDetail from "./pages/UnitDetail";
 import AddUnit from "./pages/AddUnit";
-import PriceMultiplier from "./pages/PriceMultiplier";
-import Admins from "./pages/Admins";
-import AdminForm from "./pages/AdminForm";
-import RecoveryPass from "./pages/RecoveryPass";
 import CheckIn from "./pages/CheckIn";
 import Reservations from "./pages/Reservations";
-import { AuthProvider } from "./context/AuthContext";
-import PrivateRoute from "./components/PrivateRoute";
+import PriceMultiplier from "./pages/PriceMultiplier";
+import NotFound from "./pages/NotFound";
 import "./styles/main.css";
 
 function App() {
   return (
-    <Router>
-      <AuthProvider>
+    <AuthProvider>
+      <Router>
         <Routes>
-          <Route path="/" element={<Login />} />
+          <Route path="/login" element={<Login />} />
           <Route path="/recoveryPass" element={<RecoveryPass />} />
           <Route path="/checkin/:id" element={<CheckIn />} />
+
           <Route
-            path="/admin"
+            path="/admin-panel"
             element={
-              <PrivateRoute>
+              <ProtectedRoute>
                 <AdminPanel />
-              </PrivateRoute>
+              </ProtectedRoute>
             }
           />
+
           <Route
             path="/admins"
             element={
-              <PrivateRoute>
+              <ProtectedRoute>
                 <Admins />
-              </PrivateRoute>
+              </ProtectedRoute>
             }
           />
+
           <Route
             path="/admins/add"
             element={
-              <PrivateRoute>
+              <ProtectedRoute>
                 <AdminForm />
-              </PrivateRoute>
+              </ProtectedRoute>
             }
           />
+
           <Route
             path="/admins/edit/:username"
             element={
-              <PrivateRoute>
+              <ProtectedRoute>
                 <AdminForm />
-              </PrivateRoute>
+              </ProtectedRoute>
             }
           />
+
           <Route
             path="/units"
             element={
-              <PrivateRoute>
+              <ProtectedRoute>
                 <Units />
-              </PrivateRoute>
+              </ProtectedRoute>
             }
           />
+
           <Route
             path="/units/:id"
             element={
-              <PrivateRoute>
+              <ProtectedRoute>
                 <UnitDetail />
-              </PrivateRoute>
+              </ProtectedRoute>
             }
           />
+
           <Route
             path="/units/add"
             element={
-              <PrivateRoute>
+              <ProtectedRoute>
                 <AddUnit />
-              </PrivateRoute>
+              </ProtectedRoute>
             }
           />
+
           <Route
             path="/reservations"
             element={
-              <PrivateRoute>
+              <ProtectedRoute>
                 <Reservations />
-              </PrivateRoute>
+              </ProtectedRoute>
             }
           />
+
           <Route
             path="/price-multiplier"
             element={
-              <PrivateRoute>
+              <ProtectedRoute>
                 <PriceMultiplier />
-              </PrivateRoute>
+              </ProtectedRoute>
             }
           />
+
+          {/* Ruta por defecto para cualquier URL no encontrada */}
+          <Route path="*" element={<NotFound />} />
         </Routes>
-      </AuthProvider>
-    </Router>
+      </Router>
+    </AuthProvider>
   );
 }
 

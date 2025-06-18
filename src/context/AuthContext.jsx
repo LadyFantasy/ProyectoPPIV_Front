@@ -1,31 +1,51 @@
 // /context/AuthContext.jsx
 import { createContext, useContext, useState, useEffect } from "react";
 
-const AuthContext = createContext(null);
+const AuthContext = createContext();
 
 export function AuthProvider({ children }) {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [loading, setLoading] = useState(true);
-  const [isSuperAdmin, setIsSuperAdmin] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState(() => {
+    const token = localStorage.getItem("token");
+    const username = localStorage.getItem("username");
+    return !!(token && username);
+  });
+  const [user, setUser] = useState(() => {
+    const username = localStorage.getItem("username");
+    const isSuperAdmin = localStorage.getItem("isSuperAdmin");
+    return username ? { username, isSuperAdmin: isSuperAdmin === "1" } : null;
+  });
 
   useEffect(() => {
-    const token = localStorage.getItem("token");
-    const superAdmin = localStorage.getItem("isSuperAdmin");
-    if (token) {
-      setIsAuthenticated(true);
-      setIsSuperAdmin(superAdmin === "1");
-    }
-    setLoading(false);
+    const handleStorageChange = () => {
+      const token = localStorage.getItem("token");
+      const username = localStorage.getItem("username");
+      const isSuperAdmin = localStorage.getItem("isSuperAdmin");
+
+      if (token && username) {
+        setIsAuthenticated(true);
+        setUser({
+          username,
+          isSuperAdmin: isSuperAdmin === "1"
+        });
+      } else {
+        setIsAuthenticated(false);
+        setUser(null);
+      }
+    };
+
+    window.addEventListener("storage", handleStorageChange);
+    return () => window.removeEventListener("storage", handleStorageChange);
   }, []);
 
-  const login = async (token, username, superAdmin) => {
+  const login = (username, token, isSuperAdmin) => {
     localStorage.setItem("token", token);
     localStorage.setItem("username", username);
-    localStorage.setItem("isSuperAdmin", superAdmin);
+    localStorage.setItem("isSuperAdmin", isSuperAdmin);
     setIsAuthenticated(true);
-    setIsSuperAdmin(superAdmin === "1");
-    // Disparar un evento de storage para notificar a otros componentes
-    window.dispatchEvent(new Event("storage"));
+    setUser({
+      username,
+      isSuperAdmin: isSuperAdmin === "1"
+    });
   };
 
   const logout = () => {
@@ -33,16 +53,20 @@ export function AuthProvider({ children }) {
     localStorage.removeItem("username");
     localStorage.removeItem("isSuperAdmin");
     setIsAuthenticated(false);
-    setIsSuperAdmin(false);
-    // Disparar un evento de storage para notificar a otros componentes
-    window.dispatchEvent(new Event("storage"));
+    setUser(null);
   };
 
   return (
-    <AuthContext.Provider value={{ isAuthenticated, isSuperAdmin, login, logout, loading }}>
+    <AuthContext.Provider value={{ isAuthenticated, user, login, logout }}>
       {children}
     </AuthContext.Provider>
   );
 }
 
-export const useAuth = () => useContext(AuthContext);
+export function useAuth() {
+  const context = useContext(AuthContext);
+  if (!context) {
+    throw new Error("useAuth must be used within an AuthProvider");
+  }
+  return context;
+}
