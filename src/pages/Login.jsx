@@ -31,7 +31,7 @@ function Login() {
       const data = await response.json();
 
       if (response.status === 200) {
-        await login(data.access_token, username, data.superUser);
+        await login(username, data.access_token, data.superUser);
         navigate("/admin");
       } else if (response.status === 401) {
         setError("Usuario o contraseña incorrectos");

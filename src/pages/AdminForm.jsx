@@ -39,7 +39,9 @@ function AdminForm() {
     try {
       setLoading(true);
       const response = await fetchWithToken("/verAdmins");
+      console.log("Response from /verAdmins:", response);
       const adminData = response[username];
+      console.log("Admin data for username:", username, adminData);
       if (adminData) {
         setFormData(prev => ({
           ...prev,
@@ -48,6 +50,7 @@ function AdminForm() {
         }));
       }
     } catch (err) {
+      console.error("Error loading admin data:", err);
       setError(err.message || "Error al cargar los datos del administrador");
     } finally {
       setLoading(false);

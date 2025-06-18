@@ -10,27 +10,32 @@ export async function fetchWithToken(endpoint, options = {}) {
   };
 
   try {
+    console.log(`Making request to ${endpoint} with headers:`, headers);
     const res = await fetch(`${config.baseUrl}${endpoint}`, { ...options, headers });
 
     if (!res.ok) {
       let errorMessage = `Error ${res.status}: ${res.statusText}`;
       try {
         const errorData = await res.json();
+        console.error("Error response data:", errorData);
         if (errorData && errorData.message) {
           errorMessage = errorData.message;
         }
-      } catch {
-        // If response is not JSON, use the default error message
+      } catch (e) {
+        console.error("Error parsing error response:", e);
       }
       throw new Error(errorMessage);
     }
 
     const contentType = res.headers.get("content-type");
     if (contentType && contentType.includes("application/json")) {
-      return await res.json();
+      const data = await res.json();
+      console.log(`Response from ${endpoint}:`, data);
+      return data;
     }
     return await res.text();
   } catch (error) {
+    console.error(`Error in fetchWithToken for ${endpoint}:`, error);
     if (error instanceof Error) {
       throw error;
     }
