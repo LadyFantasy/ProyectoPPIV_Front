@@ -10,6 +10,7 @@ import Admins from "./pages/Admins";
 import AdminForm from "./pages/AdminForm";
 import RecoveryPass from "./pages/RecoveryPass";
 import CheckIn from "./pages/CheckIn";
+import Reservations from "./pages/Reservations";
 import { AuthProvider } from "./context/AuthContext";
 import PrivateRoute from "./components/PrivateRoute";
 import "./styles/main.css";
@@ -75,6 +76,14 @@ function App() {
             element={
               <PrivateRoute>
                 <AddUnit />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/reservations"
+            element={
+              <PrivateRoute>
+                <Reservations />
               </PrivateRoute>
             }
           />

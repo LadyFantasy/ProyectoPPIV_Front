@@ -22,7 +22,6 @@ function AdminPanel() {
     };
 
     checkSuperAdmin();
-    // Agregar un listener para cambios en localStorage
     window.addEventListener("storage", checkSuperAdmin);
 
     return () => {
@@ -60,7 +59,7 @@ function AdminPanel() {
       : []),
     {
       title: "Ver reservas",
-      route: "#"
+      route: "/reservations"
     },
     {
       title: "Multiplicador de precio",

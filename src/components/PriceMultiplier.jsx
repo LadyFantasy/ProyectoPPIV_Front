@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { useAuth } from "../context/AuthContext";
 import MultiplierRow from "./MultiplierRow";
 import "../styles/PriceMultiplier.css";
-import { fetchWithToken } from "../utils/fetchWithToken";
+/* import { fetchWithToken } from "../utils/fetchWithToken"; */
 import config from "../config";
 
 function PriceMultiplier() {
