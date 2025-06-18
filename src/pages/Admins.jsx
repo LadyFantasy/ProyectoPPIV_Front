@@ -72,6 +72,7 @@ function Admins() {
     try {
       setLoading(true);
       const response = await fetchWithToken("/verAdmins");
+      console.log("Datos recibidos del backend:", response);
       setAdmins(response);
     } catch {
       setError("Error al cargar los administradores");

@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
-import { fetchWithToken } from "../utils/fetchWithToken";
+import config from "../config";
 import "../styles/CheckIn.css";
 
 function CheckIn() {
@@ -14,15 +14,26 @@ function CheckIn() {
     const performCheckIn = async () => {
       try {
         setLoading(true);
-        const response = await fetchWithToken(`/checkin?id=${id}`);
-        if (response.message === "Check-in realizado con éxito") {
-          setUnitTitle(response.unit);
+        const response = await fetch(`${config.baseUrl}/checkin?id=${id}`);
+
+        if (!response.ok) {
+          throw new Error("Error en la respuesta del servidor");
+        }
+
+        const data = await response.json();
+
+        if (!data || typeof data !== "object") {
+          throw new Error("Formato de respuesta inválido");
+        }
+
+        if (data.message === "Check-in realizado con éxito" && data.unit) {
+          setUnitTitle(data.unit);
           setSuccess(true);
         } else {
-          setError("No se pudo realizar el check-in");
+          setError(data.message || "No se pudo realizar el check-in");
         }
-      } catch (error) {
-        setError("Error al realizar el check-in");
+      } catch (err) {
+        setError(err.message || "Error al realizar el check-in");
       } finally {
         setLoading(false);
       }

@@ -47,8 +47,8 @@ function AdminForm() {
           superUser: adminData.superUser
         }));
       }
-    } catch (error) {
-      setError(error.message || "Error al cargar los datos del administrador");
+    } catch (err) {
+      setError(err.message || "Error al cargar los datos del administrador");
     } finally {
       setLoading(false);
     }
@@ -58,7 +58,7 @@ function AdminForm() {
     const { name, value, type, checked } = e.target;
     setFormData(prev => ({
       ...prev,
-      [name]: type === "checkbox" ? checked : value
+      [name]: type === "checkbox" ? (checked ? "True" : "False") : value
     }));
   };
 
@@ -79,11 +79,7 @@ function AdminForm() {
     try {
       setLoading(true);
       if (isEditing) {
-        // Si se proporcionó una nueva contraseña, actualizarla
         if (formData.password) {
-          console.log("Datos enviados al backend para modificar contraseña:", {
-            password: formData.password
-          });
           await fetchWithToken("/editPass", {
             method: "POST",
             body: JSON.stringify({
@@ -91,21 +87,15 @@ function AdminForm() {
             })
           });
         }
-        // No hay ruta para modificar superUser en el backend
-        // TODO: Implementar cuando el backend lo soporte
       } else {
-        console.log("Datos enviados al backend para crear admin:", {
+        const adminData = {
           username: formData.username,
           password: formData.password,
           superUser: formData.superUser
-        });
+        };
         await fetchWithToken("/crearAdmin", {
           method: "POST",
-          body: JSON.stringify({
-            username: formData.username,
-            password: formData.password,
-            superUser: formData.superUser
-          })
+          body: JSON.stringify(adminData)
         });
       }
 

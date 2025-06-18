@@ -2,6 +2,8 @@ import { useState, useEffect } from "react";
 import { useAuth } from "../context/AuthContext";
 import MultiplierRow from "./MultiplierRow";
 import "../styles/PriceMultiplier.css";
+import { fetchWithToken } from "../utils/fetchWithToken";
+import config from "../config";
 
 function PriceMultiplier() {
   const { user } = useAuth();
@@ -15,7 +17,8 @@ function PriceMultiplier() {
 
   const fetchRates = async () => {
     try {
-      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/price-multiplier`, {
+      setLoading(true);
+      const response = await fetch(`${config.baseUrl}/api/price-multiplier`, {
         headers: {
           Authorization: `Bearer ${user.token}`
         }
@@ -89,7 +92,8 @@ function PriceMultiplier() {
 
   const handleSaveRates = async () => {
     try {
-      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/price-multiplier`, {
+      setLoading(true);
+      const response = await fetch(`${config.baseUrl}/api/price-multiplier`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -106,6 +110,8 @@ function PriceMultiplier() {
     } catch (error) {
       console.error("Error:", error);
       alert("Error al guardar los multiplicadores");
+    } finally {
+      setLoading(false);
     }
   };
 
