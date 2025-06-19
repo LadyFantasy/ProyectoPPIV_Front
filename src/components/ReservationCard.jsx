@@ -1,9 +1,33 @@
 import "../styles/Reservations.css";
+import { useState } from "react";
+import { fetchWithToken } from "../utils/fetchWithToken";
+import ConfirmModal from "./ConfirmModal";
+import SuccessModal from "./SuccessModal";
 
-function ReservationCard({ reservation }) {
-  // TODO: Implementar funcionalidad de cancelación cuando esté disponible en el backend
+function ReservationCard({ reservation, onCancelSuccess }) {
+  console.log("ReservationCard reservation:", reservation);
+  const [showConfirm, setShowConfirm] = useState(false);
+  const [showSuccess, setShowSuccess] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+
   const handleCancel = () => {
-    console.log("Cancelar reserva:", reservation.id);
+    setShowConfirm(true);
+  };
+
+  const confirmCancel = async () => {
+    setLoading(true);
+    setError("");
+    try {
+      await fetchWithToken(`/cancelarReserva?id=${reservation.unit_id}`);
+      setShowConfirm(false);
+      setShowSuccess(true);
+      if (onCancelSuccess) onCancelSuccess();
+    } catch (err) {
+      setError(err.message || "Error al cancelar la reserva");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -32,8 +56,11 @@ function ReservationCard({ reservation }) {
           <p>Pagado: ${reservation.Pagado}</p>
         </div>
         <div className="reservation-card__footer">
-          <button className="reservation-card__cancel-btn" onClick={handleCancel}>
-            Cancelar reserva
+          <button
+            className="reservation-card__cancel-btn"
+            onClick={handleCancel}
+            disabled={loading}>
+            {loading ? "Cancelando..." : "Cancelar reserva"}
           </button>
           <span className="reservation-card__id">ID: {reservation.unit_id}</span>
         </div>
@@ -43,6 +70,20 @@ function ReservationCard({ reservation }) {
           </div>
         )}
       </div>
+      {showConfirm && (
+        <ConfirmModal
+          text="¿Está seguro que desea cancelar esta reserva?"
+          error={error}
+          onConfirm={confirmCancel}
+          onCancel={() => setShowConfirm(false)}
+        />
+      )}
+      {showSuccess && (
+        <SuccessModal
+          message="Reserva cancelada exitosamente."
+          onConfirm={() => setShowSuccess(false)}
+        />
+      )}
     </div>
   );
 }

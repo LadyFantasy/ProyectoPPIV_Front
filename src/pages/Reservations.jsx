@@ -30,6 +30,19 @@ function Reservations() {
     fetchReservations();
   }, []);
 
+  // Nueva función para refrescar reservas tras cancelar
+  const refreshReservations = async () => {
+    try {
+      setLoading(true);
+      const data = await fetchWithToken("/verReservas");
+      setReservations(data);
+    } catch (err) {
+      setError(err.message || "Error al cargar las reservas");
+    } finally {
+      setLoading(false);
+    }
+  };
+
   if (loading) {
     return (
       <>
@@ -67,7 +80,11 @@ function Reservations() {
                 <h3 className="reservations-section__title">Ocupadas</h3>
                 <div className="reservations-grid">
                   {reservations.current.map(reservation => (
-                    <ReservationCard key={reservation.id} reservation={reservation} />
+                    <ReservationCard
+                      key={reservation.unit_id}
+                      reservation={reservation}
+                      onCancelSuccess={refreshReservations}
+                    />
                   ))}
                 </div>
               </div>
@@ -78,7 +95,11 @@ function Reservations() {
                 <h3 className="reservations-section__title">Futuras</h3>
                 <div className="reservations-grid">
                   {reservations.future.map(reservation => (
-                    <ReservationCard key={reservation.id} reservation={reservation} />
+                    <ReservationCard
+                      key={reservation.unit_id}
+                      reservation={reservation}
+                      onCancelSuccess={refreshReservations}
+                    />
                   ))}
                 </div>
               </div>
