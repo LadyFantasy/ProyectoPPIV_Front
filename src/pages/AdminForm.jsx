@@ -119,80 +119,32 @@ function AdminForm() {
         onClick={() => navigate("/admins")}
         className="back-button"
       />
-      <div className="admin-form">
-        <form onSubmit={handleSubmit} className="admin-form__form">
-          <div className="admin-form__field">
-            <label htmlFor="username">Usuario</label>
+      <div className="admin-form-container">
+        <h2 className="admin-form-title">
+          {isEditing ? "Editar administrador" : "Agregar administrador"}
+        </h2>
+        <form className="admin-form" onSubmit={handleSubmit}>
+          <input
+            type="text"
+            name="username"
+            value={formData.username}
+            onChange={handleChange}
+            placeholder="Usuario"
+            className="admin-input"
+            disabled={isEditing}
+          />
+          <label className="admin-label">
             <input
-              type="text"
-              id="username"
-              name="username"
-              value={formData.username}
+              type="checkbox"
+              name="superUser"
+              checked={formData.superUser === "True" || formData.superUser === true}
               onChange={handleChange}
-              disabled={isEditing}
-              required
-              autoComplete="username"
+              className="admin-checkbox"
             />
-          </div>
-
-          {!isEditing ? (
-            <>
-              <div className="admin-form__field">
-                <label htmlFor="password">Contraseña</label>
-                <input
-                  type="password"
-                  id="password"
-                  name="password"
-                  value={formData.password}
-                  onChange={handleChange}
-                  required
-                  autoComplete="new-password"
-                />
-              </div>
-
-              <div className="admin-form__field">
-                <label htmlFor="confirmPassword">Confirmar Contraseña</label>
-                <input
-                  type="password"
-                  id="confirmPassword"
-                  name="confirmPassword"
-                  value={formData.confirmPassword}
-                  onChange={handleChange}
-                  required
-                  autoComplete="new-password"
-                />
-              </div>
-            </>
-          ) : (
-            <div className="admin-form__field">
-              <label htmlFor="password">Nueva Contraseña</label>
-              <input
-                type="password"
-                id="password"
-                name="password"
-                value={formData.password}
-                onChange={handleChange}
-                autoComplete="new-password"
-              />
-            </div>
-          )}
-
-          <div className="admin-form__field checkbox">
-            <label htmlFor="superUser">
-              <input
-                type="checkbox"
-                id="superUser"
-                name="superUser"
-                checked={formData.superUser}
-                onChange={handleChange}
-              />
-              Super Usuario
-            </label>
-          </div>
-
-          {error && <p className="admin-form__error">{error}</p>}
-
-          <Button1 title={isEditing ? "Modificar" : "Crear"} type="submit" disabled={loading} />
+            Super usuario
+          </label>
+          {error && <div className="error-message">{error}</div>}
+          <Button1 title={isEditing ? "Guardar cambios" : "Agregar administrador"} type="submit" />
         </form>
       </div>
     </>
