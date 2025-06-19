@@ -79,7 +79,8 @@ function ReservationCard({ reservation, onCancelSuccess }) {
       )}
       {showSuccess && (
         <SuccessModal
-          message="Reserva cancelada exitosamente."
+          title="Reserva cancelada"
+          message="La reserva ha sido cancelada correctamente."
           onConfirm={() => setShowSuccess(false)}
         />
       )}
