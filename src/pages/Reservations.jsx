@@ -43,6 +43,10 @@ function Reservations() {
     }
   };
 
+  // Depuración: mostrar reservas en consola
+  console.log("reservations.current", reservations.current);
+  console.log("reservations.future", reservations.future);
+
   if (loading) {
     return (
       <>
@@ -81,7 +85,7 @@ function Reservations() {
                 <div className="reservations-grid">
                   {reservations.current.map(reservation => (
                     <ReservationCard
-                      key={reservation.unit_id}
+                      key={reservation.id}
                       reservation={reservation}
                       onCancelSuccess={refreshReservations}
                     />
@@ -96,7 +100,7 @@ function Reservations() {
                 <div className="reservations-grid">
                   {reservations.future.map(reservation => (
                     <ReservationCard
-                      key={reservation.unit_id}
+                      key={reservation.id}
                       reservation={reservation}
                       onCancelSuccess={refreshReservations}
                     />

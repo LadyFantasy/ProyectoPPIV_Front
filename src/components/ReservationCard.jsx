@@ -5,7 +5,6 @@ import ConfirmModal from "./ConfirmModal";
 import SuccessModal from "./SuccessModal";
 
 function ReservationCard({ reservation, onCancelSuccess }) {
-  console.log("ReservationCard reservation:", reservation);
   const [showConfirm, setShowConfirm] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -19,7 +18,7 @@ function ReservationCard({ reservation, onCancelSuccess }) {
     setLoading(true);
     setError("");
     try {
-      await fetchWithToken(`/cancelarReserva?id=${reservation.unit_id}`);
+      await fetchWithToken(`/cancelarReserva?id=${reservation.id}`);
       setShowConfirm(false);
       setShowSuccess(true);
       if (onCancelSuccess) onCancelSuccess();
@@ -62,7 +61,7 @@ function ReservationCard({ reservation, onCancelSuccess }) {
             disabled={loading}>
             {loading ? "Cancelando..." : "Cancelar reserva"}
           </button>
-          <span className="reservation-card__id">ID: {reservation.unit_id}</span>
+          <span className="reservation-card__id">ID: {reservation.id}</span>
         </div>
         {reservation.checked_in === 1 && (
           <div className="reservation-card__status">
