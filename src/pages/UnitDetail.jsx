@@ -26,6 +26,7 @@ export default function UnitDetail() {
   const [success, setSuccess] = useState(false);
   const [loading, setLoading] = useState(true);
   const [isDeleting, setIsDeleting] = useState(false);
+  const [loadingConfirm, setLoadingConfirm] = useState(false);
 
   const fetchUnit = useCallback(async () => {
     try {
@@ -124,6 +125,7 @@ export default function UnitDetail() {
   };
 
   const confirmAction = async () => {
+    setLoadingConfirm(true);
     try {
       if (modal === "edit") {
         await fetchWithToken("/editarUnidad", {
@@ -146,6 +148,8 @@ export default function UnitDetail() {
       console.error("Error detallado:", error);
       setError(error.message || "Error al procesar la solicitud");
       setModal(null);
+    } finally {
+      setLoadingConfirm(false);
     }
   };
 
@@ -241,6 +245,7 @@ export default function UnitDetail() {
             error={error}
             onConfirm={confirmAction}
             onCancel={() => setModal(null)}
+            loading={loadingConfirm}
           />
         )}
 

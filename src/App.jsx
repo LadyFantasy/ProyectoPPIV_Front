@@ -13,6 +13,7 @@ import AddUnit from "./pages/AddUnit";
 import CheckIn from "./pages/CheckIn";
 import Reservations from "./pages/Reservations";
 import PriceMultiplier from "./pages/PriceMultiplier";
+import ChangePassword from "./pages/ChangePassword";
 import NotFound from "./pages/NotFound";
 import "./styles/main.css";
 
@@ -102,6 +103,15 @@ function App() {
             element={
               <ProtectedRoute>
                 <PriceMultiplier />
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path="/change-password"
+            element={
+              <ProtectedRoute>
+                <ChangePassword />
               </ProtectedRoute>
             }
           />

@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { fetchWithToken } from "../utils/fetchWithToken";
 import Navbar from "../components/Navbar";
-import { FiTrash2, FiEdit } from "react-icons/fi";
+import { FiTrash2 } from "react-icons/fi";
 import SuccessModal from "../components/SuccessModal";
 import Button1 from "../components/Button1";
 import "../styles/Admins.css";
@@ -110,11 +110,6 @@ function Admins() {
                     <div className="admin-table-cell">{username}</div>
                     <div className="admin-table-cell">{data.superUser ? "Sí" : "No"}</div>
                     <div className="admin-table-cell actions">
-                      <button
-                        className="action-button edit"
-                        onClick={() => navigate(`/admins/edit/${username}`)}>
-                        <FiEdit />
-                      </button>
                       <button
                         className="action-button delete"
                         onClick={() => handleDeleteClick(data.id, username)}>

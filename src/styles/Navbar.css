@@ -16,10 +16,12 @@
 
   padding: 3rem;
 }
-.navbar-title__title{
+
+.navbar-title__title {
   color: #fff;
   font-weight: 600;
 }
+
 .navbar-title__logo {
   font-size: 3rem;
   font-weight: 600;
@@ -40,13 +42,17 @@
   align-items: center;
 }
 
-.navbar__home, .navbar__logout {
+.navbar__home,
+.navbar__logout,
+.navbar__key {
   font-size: 3.5rem;
   color: #fff;
   cursor: pointer;
   transition: transform 0.2s ease;
 }
 
-.navbar__home:hover, .navbar__logout:hover {
+.navbar__home:hover,
+.navbar__logout:hover,
+.navbar__key:hover {
   transform: scale(1.05);
 }
