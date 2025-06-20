@@ -15,6 +15,7 @@ import Reservations from "./pages/Reservations";
 import PriceMultiplier from "./pages/PriceMultiplier";
 import ChangePassword from "./pages/ChangePassword";
 import NotFound from "./pages/NotFound";
+import Survey from "./pages/Survey";
 import "./styles/main.css";
 
 function App() {
@@ -25,6 +26,7 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/recoveryPass" element={<RecoveryPass />} />
           <Route path="/checkin/:id" element={<CheckIn />} />
+          <Route path="/encuesta/:id" element={<Survey />} />
 
           <Route
             path="/admin-panel"

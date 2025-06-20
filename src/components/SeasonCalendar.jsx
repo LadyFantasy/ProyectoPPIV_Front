@@ -9,11 +9,16 @@ function SeasonCalendar({ rates }) {
   const getMultiplierColor = multiplier => {
     if (multiplier > 2) return "#ff4444";
     if (multiplier >= 1) {
-      const ratio = multiplier - 1;
-      return `rgb(${102 + 153 * ratio}, ${187 + 68 * ratio}, ${106 - 106 * ratio})`;
+      const ratio = Math.min((multiplier - 1) / 1, 1);
+      const r = 102 + (52 - 102) * ratio;
+      const g = 187 + (152 - 187) * ratio;
+      const b = 106 + (219 - 106) * ratio;
+      return `rgb(${Math.round(r)}, ${Math.round(g)}, ${Math.round(b)})`;
     }
     const ratio = multiplier;
-    return `rgb(${144 + 111 * ratio}, ${238 + 17 * ratio}, ${144 + 111 * ratio})`;
+    return `rgb(${144 + (102 - 144) * ratio}, ${238 + (187 - 238) * ratio}, ${
+      144 + (106 - 144) * ratio
+    })`;
   };
 
   const renderDayContents = (day, date) => {
@@ -30,9 +35,12 @@ function SeasonCalendar({ rates }) {
     });
 
     const color = rate ? getMultiplierColor(rate.multiplier) : null;
+    const title = rate ? `Multiplicador: ${rate.multiplier}x` : "Multiplicador: 1x (Base)";
+
     return (
       <div
         className={`price-multiplier__day-content ${color ? "has-color" : ""}`}
+        title={title}
         style={color ? { backgroundColor: color } : {}}>
         {day}
       </div>
@@ -60,7 +68,7 @@ function SeasonCalendar({ rates }) {
             <span>Multiplicador 0x - 1x</span>
           </div>
           <div className="price-multiplier__legend-item">
-            <div className="price-multiplier__legend-color price-multiplier__legend-color--yellow" />
+            <div className="price-multiplier__legend-color price-multiplier__legend-color--blue" />
             <span>Multiplicador 1x - 2x</span>
           </div>
           <div className="price-multiplier__legend-item">

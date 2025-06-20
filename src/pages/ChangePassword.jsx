@@ -49,8 +49,8 @@ function ChangePassword() {
             title="Cambiar contraseña"
             password={password}
             confirmPassword={confirmPassword}
-            onPasswordChange={e => setPassword(e.target.value)}
-            onConfirmPasswordChange={e => setConfirmPassword(e.target.value)}
+            onPasswordChange={e => setPassword(e.target.value.trim())}
+            onConfirmPasswordChange={e => setConfirmPassword(e.target.value.trim())}
             onSubmit={handleSubmit}
             error={error}
             success={null}

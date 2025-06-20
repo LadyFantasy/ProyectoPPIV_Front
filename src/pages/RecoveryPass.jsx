@@ -70,8 +70,8 @@ function RecoveryPass() {
         title="Recuperar Contraseña"
         password={password}
         confirmPassword={confirmPassword}
-        onPasswordChange={e => setPassword(e.target.value)}
-        onConfirmPasswordChange={e => setConfirmPassword(e.target.value)}
+        onPasswordChange={e => setPassword(e.target.value.trim())}
+        onConfirmPasswordChange={e => setConfirmPassword(e.target.value.trim())}
         onSubmit={handleSubmit}
         error={error}
         success={success}

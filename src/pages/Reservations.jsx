@@ -5,7 +5,12 @@ import ReservationCard from "../components/ReservationCard";
 import "../styles/Reservations.css";
 
 function Reservations() {
-  const [reservations, setReservations] = useState({ current: [], future: [] });
+  const [reservations, setReservations] = useState({
+    current: [],
+    future: [],
+    cancelled: [],
+    past: []
+  });
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
@@ -14,12 +19,18 @@ function Reservations() {
       try {
         setLoading(true);
         const data = await fetchWithToken("/verReservas");
-        console.log("Respuesta del backend:", data);
+        console.log("Datos recibidos del backend (/verReservas):", data);
         console.log(
           "Ejemplo de reserva con check-in:",
           data.current.find(r => r.checked_in)
         );
-        setReservations(data);
+
+        setReservations({
+          current: data.current || [],
+          future: data.future || [],
+          cancelled: data.cancelled || [],
+          past: data.past || []
+        });
       } catch (err) {
         setError(err.message || "Error al cargar las reservas");
       } finally {
@@ -75,13 +86,16 @@ function Reservations() {
       <div className="reservations-page">
         <h1 className="reservations-title">Reservas</h1>
 
-        {reservations.current.length === 0 && reservations.future.length === 0 ? (
+        {reservations.current.length === 0 &&
+        reservations.future.length === 0 &&
+        reservations.cancelled.length === 0 &&
+        reservations.past.length === 0 ? (
           <p className="no-reservations">No hay reservas activas</p>
         ) : (
           <>
-            {reservations.current.length > 0 && (
-              <div className="reservations-section">
-                <h3 className="reservations-section__title">Ocupadas</h3>
+            <div className="reservations-section">
+              <h3 className="reservations-section__title">Vigentes</h3>
+              {reservations.current.length > 0 ? (
                 <div className="reservations-grid">
                   {reservations.current.map(reservation => (
                     <ReservationCard
@@ -91,14 +105,16 @@ function Reservations() {
                     />
                   ))}
                 </div>
-              </div>
-            )}
+              ) : (
+                <p className="no-reservations-message">No hay reservas vigentes.</p>
+              )}
+            </div>
 
-            {reservations.future.length > 0 && (
-              <div className="reservations-section">
-                <h3 className="reservations-section__title">Futuras</h3>
+            <div className="reservations-section">
+              <h3 className="reservations-section__title">Futuras</h3>
+              {(reservations.future || []).length > 0 ? (
                 <div className="reservations-grid">
-                  {reservations.future.map(reservation => (
+                  {(reservations.future || []).map(reservation => (
                     <ReservationCard
                       key={reservation.id}
                       reservation={reservation}
@@ -106,8 +122,44 @@ function Reservations() {
                     />
                   ))}
                 </div>
-              </div>
-            )}
+              ) : (
+                <p className="no-reservations-message">No hay reservas futuras.</p>
+              )}
+            </div>
+
+            <div className="reservations-section">
+              <h3 className="reservations-section__title">Canceladas</h3>
+              {(reservations.cancelled || []).length > 0 ? (
+                <div className="reservations-grid">
+                  {(reservations.cancelled || []).map(reservation => (
+                    <ReservationCard
+                      key={reservation.id}
+                      reservation={reservation}
+                      onCancelSuccess={refreshReservations}
+                    />
+                  ))}
+                </div>
+              ) : (
+                <p className="no-reservations-message">No hay reservas canceladas.</p>
+              )}
+            </div>
+
+            <div className="reservations-section">
+              <h3 className="reservations-section__title">Pasadas</h3>
+              {(reservations.past || []).length > 0 ? (
+                <div className="reservations-grid">
+                  {(reservations.past || []).map(reservation => (
+                    <ReservationCard
+                      key={reservation.id}
+                      reservation={reservation}
+                      onCancelSuccess={refreshReservations}
+                    />
+                  ))}
+                </div>
+              ) : (
+                <p className="no-reservations-message">No hay reservas pasadas.</p>
+              )}
+            </div>
           </>
         )}
       </div>

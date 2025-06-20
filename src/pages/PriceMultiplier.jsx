@@ -7,12 +7,15 @@ import MultiplierRow from "../components/MultiplierRow";
 import SeasonCalendar from "../components/SeasonCalendar";
 import { format } from "date-fns";
 import "../styles/PriceMultiplier.css";
+import ConfirmModal from "../components/ConfirmModal";
 
 function PriceMultiplier() {
   const [seasonRates, setSeasonRates] = useState([]);
   const [showSuccessModal, setShowSuccessModal] = useState(false);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(true);
+  const [showConfirmModal, setShowConfirmModal] = useState(false);
+  const [isSaving, setIsSaving] = useState(false);
 
   useEffect(() => {
     fetchSeasonRates();
@@ -149,7 +152,8 @@ function PriceMultiplier() {
     return true;
   };
 
-  const handleSubmit = async () => {
+  const handleSaveRates = async () => {
+    setIsSaving(true);
     try {
       setError("");
 
@@ -193,6 +197,9 @@ function PriceMultiplier() {
         error.message || "Error al actualizar los multiplicadores. Por favor intente nuevamente."
       );
       setShowSuccessModal(false);
+    } finally {
+      setIsSaving(false);
+      setShowConfirmModal(false);
     }
   };
 
@@ -304,8 +311,8 @@ function PriceMultiplier() {
           )}
 
           <div className="price-multiplier__actions">
-            <Button1 title="Agregar período" onClick={handleAddRate} />
-            <Button1 title="Guardar cambios" onClick={handleSubmit} />
+            <Button1 title="Agregar Período" onClick={handleAddRate} />
+            <Button1 title="Guardar Cambios" onClick={() => setShowConfirmModal(true)} />
           </div>
 
           <SeasonCalendar rates={seasonRates} />
@@ -318,6 +325,15 @@ function PriceMultiplier() {
           />
         )}
         {error && <div className="error-message">{error}</div>}
+
+        {showConfirmModal && (
+          <ConfirmModal
+            text="¿Está seguro que desea guardar los cambios?"
+            onConfirm={handleSaveRates}
+            onCancel={() => setShowConfirmModal(false)}
+            loading={isSaving}
+          />
+        )}
       </div>
     </>
   );

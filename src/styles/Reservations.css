@@ -162,3 +162,18 @@
   text-align: center;
   margin-top: 4rem;
 }
+
+.no-reservations-message {
+  color: var(--color-primary);
+  font-size: 1.6rem;
+  padding: 2rem;
+  text-align: center;
+  background-color: var(--color-secondary-light);
+  border-radius: 8px;
+  margin-top: 1rem;
+}
+
+.past-reservation {
+  filter: grayscale(100%);
+  opacity: 0.6;
+}

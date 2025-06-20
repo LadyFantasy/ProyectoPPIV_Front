@@ -62,9 +62,7 @@ function Login() {
       );
 
       if (response.status === 200) {
-        setRecoveryMessage(
-          "Recibirás un correo con un link para modificar tu contraseña"
-        );
+        setRecoveryMessage("Recibirás un correo con un link para modificar tu contraseña");
         setError("");
       } else {
         setError("Error al procesar la solicitud de recuperación");
@@ -89,7 +87,7 @@ function Login() {
             type="text"
             placeholder="Tu email..."
             value={username}
-            onChange={e => setUsername(e.target.value)}
+            onChange={e => setUsername(e.target.value.trim())}
             onFocus={() => {
               setError("");
               setRecoveryMessage("");
@@ -102,7 +100,7 @@ function Login() {
               type={showPassword ? "text" : "password"}
               placeholder="Tu contraseña..."
               value={password}
-              onChange={e => setPassword(e.target.value)}
+              onChange={e => setPassword(e.target.value.trim())}
               onFocus={() => {
                 setError("");
                 setRecoveryMessage("");

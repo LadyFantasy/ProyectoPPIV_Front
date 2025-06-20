@@ -25,12 +25,15 @@ export default function UnitDetail() {
   const [error, setError] = useState("");
   const [success, setSuccess] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
   const [loadingConfirm, setLoadingConfirm] = useState(false);
 
   const fetchUnit = useCallback(async () => {
     try {
+      setLoading(true);
       const data = await fetchWithToken(`/api/terceros/units/?id=${id}`);
+      console.log("Datos de la unidad recibidos del backend:", data);
       if (Array.isArray(data) && data.length > 0) {
         setUnit(data[0]);
       }
@@ -153,6 +156,25 @@ export default function UnitDetail() {
     }
   };
 
+  const handleDelete = async () => {
+    setIsDeleting(true);
+    try {
+      await fetchWithToken("/eliminarUnidad", {
+        method: "POST",
+        body: JSON.stringify({ id: unit.id })
+      });
+      setSuccess(true);
+      setIsDeleting(true);
+      setModal(null);
+      navigate("/units");
+    } catch (err) {
+      setError(err.message || "Error al eliminar la unidad");
+    } finally {
+      setIsDeleting(false);
+      setShowDeleteConfirm(false);
+    }
+  };
+
   const fotos = formData.urls_fotos
     ? formData.urls_fotos
         .split(",")
@@ -234,7 +256,7 @@ export default function UnitDetail() {
 
         <div className="unit-detail__buttons">
           <Button1 title="Modificar" onClick={() => setModal("edit")} />
-          <Button1 title="Eliminar" className="danger" onClick={() => setModal("delete")} />
+          <Button1 title="Eliminar" className="danger" onClick={() => setShowDeleteConfirm(true)} />
         </div>
 
         {modal && (
@@ -246,6 +268,15 @@ export default function UnitDetail() {
             onConfirm={confirmAction}
             onCancel={() => setModal(null)}
             loading={loadingConfirm}
+          />
+        )}
+
+        {showDeleteConfirm && (
+          <ConfirmModal
+            text="¿Está seguro que desea eliminar esta unidad?"
+            onConfirm={handleDelete}
+            onCancel={() => setShowDeleteConfirm(false)}
+            loading={isDeleting}
           />
         )}
 
@@ -264,6 +295,8 @@ export default function UnitDetail() {
             }}
           />
         )}
+
+        {error && <p className="error">{error}</p>}
       </div>
     </>
   );

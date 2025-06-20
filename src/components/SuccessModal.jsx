@@ -10,7 +10,9 @@ export default function SuccessModal({
   onClose,
   onCancel,
   showCancelButton = false,
-  title
+  title,
+  buttonText = "Aceptar",
+  buttonDisabled = false
 }) {
   const [isVisible, setIsVisible] = useState(true);
 
@@ -39,7 +41,7 @@ export default function SuccessModal({
         <p>{message}</p>
         <div className="modal-buttons">
           {showCancelButton && <Button1 title="Cancelar" onClick={handleCancel} />}
-          <Button1 title="Aceptar" onClick={handleConfirm} />
+          <Button1 title={buttonText} onClick={handleConfirm} disabled={buttonDisabled} />
         </div>
       </div>
     </div>

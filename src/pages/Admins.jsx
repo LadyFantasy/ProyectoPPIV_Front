@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { fetchWithToken } from "../utils/fetchWithToken";
 import Navbar from "../components/Navbar";
 import { FiTrash2 } from "react-icons/fi";
+import ConfirmModal from "../components/ConfirmModal";
 import SuccessModal from "../components/SuccessModal";
 import Button1 from "../components/Button1";
 import "../styles/Admins.css";
@@ -10,11 +11,13 @@ import "../styles/Admins.css";
 function Admins() {
   const navigate = useNavigate();
   const [admins, setAdmins] = useState({});
+  const [editedAdmins, setEditedAdmins] = useState({});
   const [error, setError] = useState("");
   const [showModal, setShowModal] = useState(false);
   const [showSuccessModal, setShowSuccessModal] = useState(false);
   const [successMessage, setSuccessMessage] = useState("");
   const [adminToDelete, setAdminToDelete] = useState(null);
+  const [deletingAdmin, setDeletingAdmin] = useState(false);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -39,7 +42,7 @@ function Admins() {
 
   const handleDeleteConfirm = async () => {
     if (!adminToDelete) return;
-
+    setDeletingAdmin(true);
     try {
       const response = await fetchWithToken(`/deleteAdmin/${adminToDelete.id}`, {
         method: "DELETE"
@@ -48,13 +51,15 @@ function Admins() {
       if (response.message) {
         setSuccessMessage(response.message);
         setShowSuccessModal(true);
+        setShowModal(false);
         loadAdmins();
       }
     } catch {
       setError("Error al eliminar el administrador");
-    } finally {
       setShowModal(false);
+    } finally {
       setAdminToDelete(null);
+      setDeletingAdmin(false);
     }
   };
 
@@ -74,10 +79,48 @@ function Admins() {
       const response = await fetchWithToken("/verAdmins");
       console.log("Datos recibidos del backend:", response);
       setAdmins(response);
+      setEditedAdmins({});
     } catch {
       setError("Error al cargar los administradores");
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleSuperUserChange = (username, checked) => {
+    setAdmins(prev => ({
+      ...prev,
+      [username]: {
+        ...prev[username],
+        superUser: checked
+      }
+    }));
+    setEditedAdmins(prev => ({
+      ...prev,
+      [username]: {
+        ...admins[username],
+        superUser: checked
+      }
+    }));
+  };
+
+  const handleSaveChanges = async () => {
+    setError("");
+    if (Object.keys(editedAdmins).length === 0) return;
+    try {
+      const payload = Object.values(editedAdmins).map(admin => ({
+        [admin.id]: admin.superUser ? 1 : 0
+      }));
+      console.log("Enviando a /editAdmin (POST):", payload);
+      await fetchWithToken("/editAdmin", {
+        method: "POST",
+        body: JSON.stringify(payload)
+      });
+      setSuccessMessage("Cambios guardados correctamente");
+      setShowSuccessModal(true);
+      loadAdmins();
+    } catch {
+      setError("Error al guardar los cambios");
     }
   };
 
@@ -88,14 +131,12 @@ function Admins() {
         <div className="admins-list">
           <div className="admins-list__header">
             <h2>Administradores existentes</h2>
-            <Button1 title="Agregar administrador" onClick={() => navigate("/admins/add")} />
           </div>
+          {error && <p className="error-message">{error}</p>}
           {loading ? (
             <p className="loading">Cargando administradores...</p>
-          ) : error ? (
-            <p className="error">{error}</p>
           ) : (
-            <div className="admins-list__content">
+            <div className="admins-list__content" onClick={() => setError("")}>
               <div className="admin-table">
                 <div className="admin-table-header">
                   <div className="admin-table-cell">ID</div>
@@ -108,7 +149,14 @@ function Admins() {
                   <div key={data.id} className="admin-table-row">
                     <div className="admin-table-cell">{data.id}</div>
                     <div className="admin-table-cell">{username}</div>
-                    <div className="admin-table-cell">{data.superUser ? "Sí" : "No"}</div>
+                    <div className="admin-table-cell">
+                      <input
+                        type="checkbox"
+                        checked={!!data.superUser}
+                        onChange={e => handleSuperUserChange(username, e.target.checked)}
+                        className="admin-superuser-checkbox"
+                      />
+                    </div>
                     <div className="admin-table-cell actions">
                       <button
                         className="action-button delete"
@@ -119,17 +167,26 @@ function Admins() {
                   </div>
                 ))}
               </div>
+              <div
+                style={{
+                  display: "flex",
+                  gap: "1rem",
+                  marginTop: "2rem",
+                  justifyContent: "flex-end"
+                }}>
+                <Button1 title="Agregar administrador" onClick={() => navigate("/admins/add")} />
+                <Button1 title="Guardar cambios" onClick={handleSaveChanges} />
+              </div>
             </div>
           )}
         </div>
 
         {showModal && adminToDelete && (
-          <SuccessModal
-            show={showModal}
+          <ConfirmModal
+            text={`¿Estás seguro de que deseas eliminar al administrador ${adminToDelete.username}?`}
             onConfirm={handleDeleteConfirm}
             onCancel={handleCancel}
-            showCancelButton={true}
-            message={`¿Estás seguro de que deseas eliminar al administrador ${adminToDelete.username}?`}
+            loading={deletingAdmin}
           />
         )}
 

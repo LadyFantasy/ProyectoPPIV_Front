@@ -10,6 +10,9 @@ function ReservationCard({ reservation, onCancelSuccess }) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
+  const isPast = new Date(reservation.Salida) < new Date();
+  const cardClass = `reservation-card ${isPast ? "past-reservation" : ""}`;
+
   const handleCancel = () => {
     setShowConfirm(true);
   };
@@ -30,7 +33,7 @@ function ReservationCard({ reservation, onCancelSuccess }) {
   };
 
   return (
-    <div className="reservation-card">
+    <div className={cardClass}>
       <div className="reservation-card__image">
         <img src={reservation.Foto} alt={reservation.Unidad} />
       </div>
@@ -55,12 +58,14 @@ function ReservationCard({ reservation, onCancelSuccess }) {
           <p>Pagado: ${reservation.Pagado}</p>
         </div>
         <div className="reservation-card__footer">
-          <button
-            className="reservation-card__cancel-btn"
-            onClick={handleCancel}
-            disabled={loading}>
-            {loading ? "Cancelando..." : "Cancelar reserva"}
-          </button>
+          {!reservation.canceled && !isPast && (
+            <button
+              className="reservation-card__cancel-btn"
+              onClick={handleCancel}
+              disabled={loading}>
+              {loading ? "Cancelando..." : "Cancelar reserva"}
+            </button>
+          )}
           <span className="reservation-card__id">ID: {reservation.id}</span>
         </div>
         {reservation.checked_in === 1 && (
@@ -75,6 +80,7 @@ function ReservationCard({ reservation, onCancelSuccess }) {
           error={error}
           onConfirm={confirmCancel}
           onCancel={() => setShowConfirm(false)}
+          loading={loading}
         />
       )}
       {showSuccess && (
