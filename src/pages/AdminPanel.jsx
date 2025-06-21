@@ -37,7 +37,11 @@ function AdminPanel() {
       setError("");
     } catch (error) {
       console.error("Error generating reports:", error);
-      setError("Error al generar los informes");
+      if (error.message === "Failed to fetch" || error.message === "NetworkError") {
+        setError("Error al generar los informes");
+      } else {
+        setError("Error al generar los informes");
+      }
       setShowSuccessModal(false);
     } finally {
       setIsGeneratingReports(false);

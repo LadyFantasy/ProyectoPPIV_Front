@@ -40,7 +40,7 @@ function PriceMultiplier() {
 
       setSeasonRates(mappedRates);
     } catch {
-      setError("Error al cargar los multiplicadores. Por favor intente nuevamente.");
+      setError("Error al cargar los multiplicadores");
       setSeasonRates([]);
     } finally {
       setLoading(false);
@@ -193,9 +193,7 @@ function PriceMultiplier() {
       setShowSuccessModal(true);
       setError("");
     } catch (error) {
-      setError(
-        error.message || "Error al actualizar los multiplicadores. Por favor intente nuevamente."
-      );
+      setError(error.message || "Error al actualizar los multiplicadores");
       setShowSuccessModal(false);
     } finally {
       setIsSaving(false);
@@ -277,7 +275,7 @@ function PriceMultiplier() {
       <>
         <Navbar />
         <div className="price-multiplier">
-          <div className="loading">Cargando...</div>
+          <div className="loading">Cargando multiplicadores...</div>
         </div>
       </>
     );

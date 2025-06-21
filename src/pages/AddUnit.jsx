@@ -29,12 +29,25 @@ function AddUnit() {
   const [modal, setModal] = useState(null);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState(false);
+  const [validationErrors, setValidationErrors] = useState({});
 
-  const handleChange = e =>
+  const handleChange = e => {
     setFormData({
       ...formData,
       [e.target.name]: e.target.value
     });
+    // Clear all validation errors when user touches any input
+    if (Object.keys(validationErrors).length > 0) {
+      setValidationErrors({});
+    }
+  };
+
+  const handleFocus = () => {
+    // Clear all validation errors when user focuses on any field
+    if (Object.keys(validationErrors).length > 0) {
+      setValidationErrors({});
+    }
+  };
 
   const handleNewPhoto = newUrl => {
     const currentUrls = formData.urls_fotos
@@ -75,6 +88,38 @@ function AddUnit() {
     }
   };
 
+  const validateForm = () => {
+    const errors = {};
+
+    if (!formData.title.trim()) {
+      errors.title = "El título es requerido";
+    }
+    if (!formData.address.trim()) {
+      errors.address = "La dirección es requerida";
+    }
+    if (!formData.price || formData.price <= 0) {
+      errors.price = "El precio es requerido y debe ser mayor a 0";
+    }
+    if (!formData.rooms || formData.rooms < 1) {
+      errors.rooms = "El número de habitaciones es requerido";
+    }
+    if (!formData.beds || formData.beds < 1) {
+      errors.beds = "El número de camas es requerido";
+    }
+    if (!formData.bathrooms || formData.bathrooms < 1) {
+      errors.bathrooms = "El número de baños es requerido";
+    }
+
+    setValidationErrors(errors);
+    return Object.keys(errors).length === 0;
+  };
+
+  const handleCreateUnit = () => {
+    if (validateForm()) {
+      setModal("create");
+    }
+  };
+
   const fotos = formData.urls_fotos
     ? formData.urls_fotos
         .split(",")
@@ -102,13 +147,19 @@ function AddUnit() {
               onChange={handleChange}
               placeholder="Título"
               className="unit-input"
+              required
+              onFocus={handleFocus}
             />
+            {validationErrors.title && (
+              <div className="error-message">{validationErrors.title}</div>
+            )}
             <input
               name="description"
               value={formData.description}
               onChange={handleChange}
               placeholder="Descripción"
               className="unit-input"
+              onFocus={handleFocus}
             />
             <input
               name="address"
@@ -116,7 +167,12 @@ function AddUnit() {
               onChange={handleChange}
               placeholder="Dirección"
               className="unit-input"
+              required
+              onFocus={handleFocus}
             />
+            {validationErrors.address && (
+              <div className="error-message">{validationErrors.address}</div>
+            )}
             <input
               name="price"
               type="number"
@@ -124,7 +180,12 @@ function AddUnit() {
               onChange={handleChange}
               placeholder="Precio"
               className="unit-input"
+              required
+              onFocus={handleFocus}
             />
+            {validationErrors.price && (
+              <div className="error-message">{validationErrors.price}</div>
+            )}
             <div className="unit-detail__numeric-group">
               {["rooms", "beds", "bathrooms"].map(field => (
                 <div key={field} className="numeric-input">
@@ -135,13 +196,18 @@ function AddUnit() {
                     name={field}
                     value={formData[field]}
                     onChange={handleChange}
-                    className="numeric-select">
+                    className="numeric-select"
+                    required
+                    onFocus={handleFocus}>
                     {Array.from({ length: 10 }, (_, i) => i + 1).map(n => (
                       <option key={n} value={n}>
                         {n}
                       </option>
                     ))}
                   </select>
+                  {validationErrors[field] && (
+                    <div className="error-message">{validationErrors[field]}</div>
+                  )}
                 </div>
               ))}
             </div>
@@ -151,7 +217,7 @@ function AddUnit() {
         </div>
 
         <div className="unit-detail__buttons">
-          <Button1 title="Crear unidad" onClick={() => setModal("create")} />
+          <Button1 title="Crear unidad" onClick={handleCreateUnit} />
         </div>
 
         {modal && (

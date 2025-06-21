@@ -28,6 +28,7 @@ export default function UnitDetail() {
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
   const [loadingConfirm, setLoadingConfirm] = useState(false);
+  const [validationErrors, setValidationErrors] = useState({});
 
   const fetchUnit = useCallback(async () => {
     try {
@@ -72,19 +73,66 @@ export default function UnitDetail() {
 
   if (loading) {
     return (
-      <div className="loading">
-        <p>Cargando...</p>
-      </div>
+      <>
+        <Navbar />
+        <div className="loading">
+          <p>Cargando unidad...</p>
+        </div>
+      </>
     );
   }
 
   if (!formData) return null;
 
-  const handleChange = e =>
+  const handleChange = e => {
     setFormData({
       ...formData,
       [e.target.name]: e.target.value
     });
+    // Clear all validation errors when user touches any input
+    if (Object.keys(validationErrors).length > 0) {
+      setValidationErrors({});
+    }
+  };
+
+  const handleFocus = () => {
+    // Clear all validation errors when user focuses on any field
+    if (Object.keys(validationErrors).length > 0) {
+      setValidationErrors({});
+    }
+  };
+
+  const validateForm = () => {
+    const errors = {};
+
+    if (!formData.title.trim()) {
+      errors.title = "El título es requerido";
+    }
+    if (!formData.address.trim()) {
+      errors.address = "La dirección es requerida";
+    }
+    if (!formData.price || formData.price <= 0) {
+      errors.price = "El precio es requerido y debe ser mayor a 0";
+    }
+    if (!formData.rooms || formData.rooms < 1) {
+      errors.rooms = "El número de habitaciones es requerido";
+    }
+    if (!formData.beds || formData.beds < 1) {
+      errors.beds = "El número de camas es requerido";
+    }
+    if (!formData.bathrooms || formData.bathrooms < 1) {
+      errors.bathrooms = "El número de baños es requerido";
+    }
+
+    setValidationErrors(errors);
+    return Object.keys(errors).length === 0;
+  };
+
+  const handleModifyUnit = () => {
+    if (validateForm()) {
+      setModal("edit");
+    }
+  };
 
   const handleNewPhoto = newUrl => {
     const currentUrls = formData.urls_fotos
@@ -204,13 +252,19 @@ export default function UnitDetail() {
               name="title"
               value={formData.title}
               onChange={handleChange}
+              onFocus={handleFocus}
               placeholder="Título"
               className="unit-input"
+              required
             />
+            {validationErrors.title && (
+              <div className="error-message">{validationErrors.title}</div>
+            )}
             <input
               name="description"
               value={formData.description}
               onChange={handleChange}
+              onFocus={handleFocus}
               placeholder="Descripción"
               className="unit-input"
             />
@@ -218,17 +272,27 @@ export default function UnitDetail() {
               name="address"
               value={formData.address}
               onChange={handleChange}
+              onFocus={handleFocus}
               placeholder="Dirección"
               className="unit-input"
+              required
             />
+            {validationErrors.address && (
+              <div className="error-message">{validationErrors.address}</div>
+            )}
             <input
               name="price"
               type="number"
               value={formData.price}
               onChange={handleChange}
+              onFocus={handleFocus}
               placeholder="Precio"
               className="unit-input"
+              required
             />
+            {validationErrors.price && (
+              <div className="error-message">{validationErrors.price}</div>
+            )}
             <div className="unit-detail__numeric-group">
               {["rooms", "beds", "bathrooms"].map(field => (
                 <div key={field} className="numeric-input">
@@ -239,13 +303,18 @@ export default function UnitDetail() {
                     name={field}
                     value={formData[field]}
                     onChange={handleChange}
-                    className="numeric-select">
+                    onFocus={handleFocus}
+                    className="numeric-select"
+                    required>
                     {Array.from({ length: 10 }, (_, i) => i + 1).map(n => (
                       <option key={n} value={n}>
                         {n}
                       </option>
                     ))}
                   </select>
+                  {validationErrors[field] && (
+                    <div className="error-message">{validationErrors[field]}</div>
+                  )}
                 </div>
               ))}
             </div>
@@ -255,7 +324,7 @@ export default function UnitDetail() {
         </div>
 
         <div className="unit-detail__buttons">
-          <Button1 title="Modificar" onClick={() => setModal("edit")} />
+          <Button1 title="Modificar" onClick={handleModifyUnit} />
           <Button1 title="Eliminar" className="danger" onClick={() => setShowDeleteConfirm(true)} />
         </div>
 

@@ -12,25 +12,55 @@ export default function Units() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
-  useEffect(() => {
-    const fetchUnits = async () => {
-      try {
-        const res = await fetch(`${config.baseUrl}/api/terceros/units`);
-        if (!res.ok) throw new Error(`Error ${res.status}`);
-        const data = await res.json();
-        setUnits(data);
-      } catch (err) {
-        setError(err.message || "Error desconocido");
-      } finally {
-        setLoading(false);
+  const fetchUnits = async () => {
+    try {
+      setLoading(true);
+      setError("");
+      const res = await fetch(`${config.baseUrl}/api/terceros/units`);
+      if (!res.ok) throw new Error(`Error ${res.status}`);
+      const data = await res.json();
+      setUnits(data);
+    } catch (err) {
+      console.error("Error al cargar unidades:", err);
+      // Mostrar mensaje amigable en lugar de errores técnicos
+      if (err.message === "Failed to fetch" || err.message === "NetworkError") {
+        setError("Error al cargar las unidades");
+      } else if (err.message.startsWith("Error ")) {
+        setError("Error al cargar las unidades");
+      } else {
+        setError("Error al cargar las unidades");
       }
-    };
+    } finally {
+      setLoading(false);
+    }
+  };
 
+  useEffect(() => {
     fetchUnits();
   }, []);
 
-  if (loading) return <p className="loading">Cargando unidades...</p>;
-  if (error) return <p>Error: {error}</p>;
+  if (loading)
+    return (
+      <>
+        <Navbar />
+        <div className="units-page">
+          <p className="loading">Cargando unidades...</p>
+        </div>
+      </>
+    );
+
+  if (error)
+    return (
+      <>
+        <Navbar />
+        <div className="units-page">
+          <div className="units-header">
+            <h2 className="units-title">Unidades</h2>
+          </div>
+          <p className="error-message">{error}</p>
+        </div>
+      </>
+    );
 
   return (
     <>

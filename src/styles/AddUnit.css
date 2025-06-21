@@ -20,3 +20,11 @@
   font-size: 2rem;
   color: var(--color-primary);
 }
+
+.error-message {
+  color: #dc3545;
+  font-size: 0.875rem;
+  margin-top: 0.25rem;
+  margin-bottom: 0.5rem;
+  font-weight: 500;
+}

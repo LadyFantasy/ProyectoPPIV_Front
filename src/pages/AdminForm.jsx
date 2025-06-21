@@ -119,7 +119,13 @@ function AdminForm() {
     }
   };
 
-  if (loading) return <p className="loading">Cargando...</p>;
+  if (loading)
+    return (
+      <>
+        <Navbar />
+        <p className="loading">Cargando administrador...</p>
+      </>
+    );
 
   return (
     <>

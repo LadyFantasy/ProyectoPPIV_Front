@@ -32,7 +32,13 @@ function Reservations() {
           past: data.past || []
         });
       } catch (err) {
-        setError(err.message || "Error al cargar las reservas");
+        console.error("Error al cargar reservas:", err);
+        // Mostrar mensaje amigable en lugar de errores técnicos
+        if (err.message === "Failed to fetch" || err.message === "NetworkError") {
+          setError("Error al cargar las reservas");
+        } else {
+          setError("Error al cargar las reservas");
+        }
       } finally {
         setLoading(false);
       }
@@ -48,7 +54,13 @@ function Reservations() {
       const data = await fetchWithToken("/verReservas");
       setReservations(data);
     } catch (err) {
-      setError(err.message || "Error al cargar las reservas");
+      console.error("Error al refrescar reservas:", err);
+      // Mostrar mensaje amigable en lugar de errores técnicos
+      if (err.message === "Failed to fetch" || err.message === "NetworkError") {
+        setError("Error al cargar las reservas");
+      } else {
+        setError("Error al cargar las reservas");
+      }
     } finally {
       setLoading(false);
     }

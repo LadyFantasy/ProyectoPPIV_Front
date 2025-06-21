@@ -129,7 +129,7 @@ function PriceMultiplier() {
         <h1>Configuración de Multiplicadores de Precio</h1>
         {error && <div className="error-message">{error}</div>}
         {loading ? (
-          <div className="loading">Cargando...</div>
+          <div className="loading">Cargando multiplicadores...</div>
         ) : (
           <>
             {rates.length === 0 ? (
