@@ -1,10 +1,15 @@
 .admin-panel__background {
   background-color: #ffffff;
   height: 100vh;
-  padding: 2rem;
   padding-top: calc(4rem + 1rem);
 }
 
+.admins-title__header{
+  margin-top: 4rem;
+  font-size: 2rem;
+  color: var(--color-primary);
+  text-align: center;
+}
 .admin-panel__title {
   font-size: 4rem;
   color: var(--color-primary);
@@ -14,10 +19,6 @@
 }
 
 .admin-panel__wrapper {
-  display: grid;
-  grid-template-columns: 2fr 2fr;
-  grid-template-rows: 2fr 2fr;
-  gap: 2rem;
   width: fit-content;
-  margin: 7rem auto;
+  margin: 5rem auto;
 }
