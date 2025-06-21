@@ -2,10 +2,11 @@
   background-color: var(--color-secondary);
   border-radius: 1rem;
   box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.1);
-  padding: 2rem;
+  padding: 2rem 10rem;
+  margin: 2rem;
   color: white;
   text-align: center;
-  padding: 5rem 2rem;
+
   cursor: pointer;
   transition: all 0.4s ease;
 }

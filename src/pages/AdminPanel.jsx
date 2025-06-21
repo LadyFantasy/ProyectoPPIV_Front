@@ -76,6 +76,9 @@ function AdminPanel() {
     <>
       <Navbar />
       <div className="admin-panel__background">
+      <div className="admins-title__header">
+            <h2>Panel Principal</h2>
+          </div>
         <div className="admin-panel__wrapper">
           {adminCards.map((card, index) => (
             <AdminCard
