@@ -10,8 +10,7 @@
 
 .amenities-options {
   position: absolute;
-  top: 4.5rem;
-  /* Altura aproximada del button1 + un pequeño espacio */
+  top: 7rem;
   left: 0;
   width: 100%;
   background-color: white;
@@ -43,7 +42,7 @@
   cursor: pointer;
 }
 
-/* Ocultar el checkbox nativo */
+
 .amenity-option input[type="checkbox"] {
   appearance: none;
   -webkit-appearance: none;

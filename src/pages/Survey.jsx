@@ -35,7 +35,7 @@ function Survey() {
 
     setLoading(true);
     try {
-      const payload = { id, ...ratings };
+      const payload = { id: parseInt(id, 10), ...ratings };
       console.log("Enviando payload:", payload);
       const response = await fetch(`${config.baseUrl}/encuesta`, {
         method: "POST",
@@ -56,7 +56,7 @@ function Survey() {
         }
         return;
       }
-    } catch (err) {
+    } catch {
       setError("Error al procesar la encuesta, intente nuevamente.");
     } finally {
       setLoading(false);
