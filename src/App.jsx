@@ -16,111 +16,117 @@ import PriceMultiplier from "./pages/PriceMultiplier";
 import ChangePassword from "./pages/ChangePassword";
 import NotFound from "./pages/NotFound";
 import Survey from "./pages/Survey";
+import Footer from "./components/Footer";
 import "./styles/main.css";
 
 function App() {
   return (
     <AuthProvider>
       <Router>
-        <Routes>
-          <Route path="/login" element={<Login />} />
-          <Route path="/recoveryPass" element={<RecoveryPass />} />
-          <Route path="/checkin/:id" element={<CheckIn />} />
-          <Route path="/encuesta/:id" element={<Survey />} />
+        <div className="app-container">
+          <main className="main-content">
+            <Routes>
+              <Route path="/login" element={<Login />} />
+              <Route path="/recoveryPass" element={<RecoveryPass />} />
+              <Route path="/checkin/:id" element={<CheckIn />} />
+              <Route path="/encuesta/:id" element={<Survey />} />
 
-          <Route
-            path="/admin-panel"
-            element={
-              <ProtectedRoute>
-                <AdminPanel />
-              </ProtectedRoute>
-            }
-          />
+              <Route
+                path="/admin-panel"
+                element={
+                  <ProtectedRoute>
+                    <AdminPanel />
+                  </ProtectedRoute>
+                }
+              />
 
-          <Route
-            path="/admins"
-            element={
-              <ProtectedRoute>
-                <Admins />
-              </ProtectedRoute>
-            }
-          />
+              <Route
+                path="/admins"
+                element={
+                  <ProtectedRoute>
+                    <Admins />
+                  </ProtectedRoute>
+                }
+              />
 
-          <Route
-            path="/admins/add"
-            element={
-              <ProtectedRoute>
-                <AdminForm />
-              </ProtectedRoute>
-            }
-          />
+              <Route
+                path="/admins/add"
+                element={
+                  <ProtectedRoute>
+                    <AdminForm />
+                  </ProtectedRoute>
+                }
+              />
 
-          <Route
-            path="/admins/edit/:username"
-            element={
-              <ProtectedRoute>
-                <AdminForm />
-              </ProtectedRoute>
-            }
-          />
+              <Route
+                path="/admins/edit/:username"
+                element={
+                  <ProtectedRoute>
+                    <AdminForm />
+                  </ProtectedRoute>
+                }
+              />
 
-          <Route
-            path="/units"
-            element={
-              <ProtectedRoute>
-                <Units />
-              </ProtectedRoute>
-            }
-          />
+              <Route
+                path="/units"
+                element={
+                  <ProtectedRoute>
+                    <Units />
+                  </ProtectedRoute>
+                }
+              />
 
-          <Route
-            path="/units/:id"
-            element={
-              <ProtectedRoute>
-                <UnitDetail />
-              </ProtectedRoute>
-            }
-          />
+              <Route
+                path="/units/:id"
+                element={
+                  <ProtectedRoute>
+                    <UnitDetail />
+                  </ProtectedRoute>
+                }
+              />
 
-          <Route
-            path="/units/add"
-            element={
-              <ProtectedRoute>
-                <AddUnit />
-              </ProtectedRoute>
-            }
-          />
+              <Route
+                path="/units/add"
+                element={
+                  <ProtectedRoute>
+                    <AddUnit />
+                  </ProtectedRoute>
+                }
+              />
 
-          <Route
-            path="/reservations"
-            element={
-              <ProtectedRoute>
-                <Reservations />
-              </ProtectedRoute>
-            }
-          />
+              <Route
+                path="/reservations"
+                element={
+                  <ProtectedRoute>
+                    <Reservations />
+                  </ProtectedRoute>
+                }
+              />
 
-          <Route
-            path="/price-multiplier"
-            element={
-              <ProtectedRoute>
-                <PriceMultiplier />
-              </ProtectedRoute>
-            }
-          />
+              <Route
+                path="/price-multiplier"
+                element={
+                  <ProtectedRoute>
+                    <PriceMultiplier />
+                  </ProtectedRoute>
+                }
+              />
 
-          <Route
-            path="/change-password"
-            element={
-              <ProtectedRoute>
-                <ChangePassword />
-              </ProtectedRoute>
-            }
-          />
+              <Route
+                path="/change-password"
+                element={
+                  <ProtectedRoute>
+                    <ChangePassword />
+                  </ProtectedRoute>
+                }
+              />
 
-          {/* Ruta por defecto para cualquier URL no encontrada */}
-          <Route path="*" element={<NotFound />} />
-        </Routes>
+              {/* Ruta por defecto para cualquier URL no encontrada */}
+              <Route path="*" element={<NotFound />} />
+            </Routes>
+          </main>
+          <Footer />
+        </div>
       </Router>
     </AuthProvider>
   );

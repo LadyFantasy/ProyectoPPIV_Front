@@ -12,15 +12,15 @@ export default function Units() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
-  const fetchUnits = async () => {
-    try {
+    const fetchUnits = async () => {
+      try {
       setLoading(true);
       setError("");
-      const res = await fetch(`${config.baseUrl}/api/terceros/units`);
-      if (!res.ok) throw new Error(`Error ${res.status}`);
-      const data = await res.json();
-      setUnits(data);
-    } catch (err) {
+        const res = await fetch(`${config.baseUrl}/api/terceros/units`);
+        if (!res.ok) throw new Error(`Error ${res.status}`);
+        const data = await res.json();
+        setUnits(data);
+      } catch (err) {
       console.error("Error al cargar unidades:", err);
       // Mostrar mensaje amigable en lugar de errores técnicos
       if (err.message === "Failed to fetch" || err.message === "NetworkError") {
@@ -30,10 +30,10 @@ export default function Units() {
       } else {
         setError("Error al cargar las unidades");
       }
-    } finally {
-      setLoading(false);
-    }
-  };
+      } finally {
+        setLoading(false);
+      }
+    };
 
   useEffect(() => {
     fetchUnits();
