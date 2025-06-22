@@ -78,3 +78,38 @@
   font-size: 1.8rem;
   color: white;
 }
+
+/* --- Responsive Design for Mobile --- */
+@media (max-width: 768px) {
+  .checkin-container {
+    padding: 1rem;
+    align-items: flex-start;
+    /* Alinea el contenido arriba */
+    padding-top: 5rem;
+  }
+
+  .checkin-content {
+    padding: 2rem;
+    margin: 0 1rem;
+    max-width: 100%;
+  }
+
+  .success-message h1,
+  .error-message h1 {
+    font-size: 2rem;
+  }
+
+  .success-message p,
+  .error-message p {
+    font-size: 1.2rem;
+  }
+
+  .success-message .unit-title {
+    font-size: 1.5rem;
+  }
+
+  .success-message .welcome-text {
+    font-size: 1rem;
+    line-height: 1.6;
+  }
+}
