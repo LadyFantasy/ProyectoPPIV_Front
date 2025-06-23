@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import Navbar from "../components/Navbar";
 import PasswordForm from "../components/PasswordForm";
 import SuccessModal from "../components/SuccessModal";
@@ -12,6 +13,7 @@ function ChangePassword() {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
+  const navigate = useNavigate();
 
   const handleSubmit = async e => {
     e.preventDefault();
@@ -64,7 +66,10 @@ function ChangePassword() {
           {showSuccess && (
             <SuccessModal
               message="Contraseña cambiada exitosamente."
-              onConfirm={() => setShowSuccess(false)}
+              onConfirm={() => {
+                setShowSuccess(false);
+                navigate("/admin-panel");
+              }}
             />
           )}
         </div>

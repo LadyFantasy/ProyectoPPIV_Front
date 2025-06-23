@@ -3,6 +3,7 @@ import { useNavigate, useSearchParams } from "react-router-dom";
 import "../styles/Login.css";
 import PasswordForm from "../components/PasswordForm";
 import config from "../config";
+import { useAuth } from "../context/AuthContext";
 
 function RecoveryPass() {
   const [searchParams] = useSearchParams();
@@ -14,6 +15,7 @@ function RecoveryPass() {
   const [success, setSuccess] = useState("");
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+  const { logout } = useAuth();
 
   useEffect(() => {
     const token = searchParams.get("token");
@@ -48,7 +50,8 @@ function RecoveryPass() {
       if (response.status === 200) {
         setSuccess("Contraseña modificada con éxito");
         setTimeout(() => {
-          navigate("/");
+          logout();
+          navigate("/login");
         }, 2000);
       } else {
         setError(data.message || "Error al modificar la contraseña");

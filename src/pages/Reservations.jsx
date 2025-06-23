@@ -19,11 +19,6 @@ function Reservations() {
       try {
         setLoading(true);
         const data = await fetchWithToken("/verReservas");
-        console.log("Datos recibidos del backend (/verReservas):", data);
-        console.log(
-          "Ejemplo de reserva con check-in:",
-          data.current.find(r => r.checked_in)
-        );
 
         setReservations({
           current: data.current || [],
@@ -33,7 +28,7 @@ function Reservations() {
         });
       } catch (err) {
         console.error("Error al cargar reservas:", err);
-        // Mostrar mensaje amigable en lugar de errores técnicos
+
         if (err.message === "Failed to fetch" || err.message === "NetworkError") {
           setError("Error al cargar las reservas");
         } else {
@@ -55,7 +50,7 @@ function Reservations() {
       setReservations(data);
     } catch (err) {
       console.error("Error al refrescar reservas:", err);
-      // Mostrar mensaje amigable en lugar de errores técnicos
+
       if (err.message === "Failed to fetch" || err.message === "NetworkError") {
         setError("Error al cargar las reservas");
       } else {
@@ -65,10 +60,6 @@ function Reservations() {
       setLoading(false);
     }
   };
-
-  // Depuración: mostrar reservas en consola
-  console.log("reservations.current", reservations.current);
-  console.log("reservations.future", reservations.future);
 
   if (loading) {
     return (

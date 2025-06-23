@@ -77,7 +77,6 @@ function Admins() {
     try {
       setLoading(true);
       const response = await fetchWithToken("/verAdmins");
-      console.log("Datos recibidos del backend:", response);
       setAdmins(response);
       setEditedAdmins({});
     } catch {
@@ -111,7 +110,6 @@ function Admins() {
       const payload = Object.values(editedAdmins).map(admin => ({
         [admin.id]: admin.superUser ? 1 : 0
       }));
-      console.log("Enviando a /editAdmin (POST):", payload);
       await fetchWithToken("/editAdmin", {
         method: "POST",
         body: JSON.stringify(payload)

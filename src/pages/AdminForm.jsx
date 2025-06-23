@@ -43,9 +43,7 @@ function AdminForm() {
     try {
       setLoading(true);
       const response = await fetchWithToken("/verAdmins");
-      console.log("Response from /verAdmins:", response);
       const adminData = response[username];
-      console.log("Admin data for username:", username, adminData);
       if (adminData) {
         setFormData(prev => ({
           ...prev,

@@ -34,7 +34,6 @@ export default function UnitDetail() {
     try {
       setLoading(true);
       const data = await fetchWithToken(`/api/terceros/units/?id=${id}`);
-      console.log("Datos de la unidad recibidos del backend:", data);
       if (Array.isArray(data) && data.length > 0) {
         setUnit(data[0]);
       }
