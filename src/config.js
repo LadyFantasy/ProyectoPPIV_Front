@@ -7,7 +7,7 @@ const config = {
   // URLs del backend
   urls: {
     local: "http://localhost:5001",
-    remote: "https://proyectoppvi.onrender.com"
+    remote: "https://proyectoppvi-1.onrender.com"
   },
 
   // Getter para obtener la URL base actual
